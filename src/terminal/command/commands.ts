@@ -8,6 +8,10 @@ export class Commands {
     return "help - list all commands\n";
   }
 
+  @Command('echo')
+  echoCommand(args: string[]): string {
+    return args.join(" ");
+  }
   @Command('clear')
   clearCommand(): string | undefined {
     return undefined
