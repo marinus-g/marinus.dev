@@ -1,5 +1,6 @@
 <div #historyContainer class="terminal-output-wrapper">
   @for (history of terminalService.history; track history.output) {
+    @if (history.prompt != null) {
     <h1 [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace'}">
       <span
         [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace', 'color': terminalService.theme.terminal.ps1.nameColor}">guest</span>
@@ -12,6 +13,7 @@
       <span [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace'}"
             class="terminal-output terminal-output__prompt" [innerHTML]="history.prompt"></span>
     </h1>
+    }
     @if (history.output) {
       <h1>
 

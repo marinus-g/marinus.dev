@@ -22,7 +22,7 @@ export class TerminalService {
 
      // TODO: FIX SPACES
     this.appendHistory({
-      prompt: " login guest",
+      prompt: null,
       historyType: HistoryType.BANNER,
       output:
         "                                                                                         \n" +
@@ -31,7 +31,7 @@ export class TerminalService {
         " |     \\/   ||     \\ |     \\ |    ||     \\| ||  |_| | `-.`-.  _ |      \\|   ___| \\  \\//  \n" +
         " |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   \n" +
         "                                                                                         \n" +
-        "                                                                                         "  +
+        "                                                                                         \n"  +
         "Login as: guest\n" +
         "guest's password:\n" +
         "" +
