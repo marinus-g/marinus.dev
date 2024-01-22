@@ -1,0 +1,15 @@
+.terminal-command-input {
+  font-family: 'Inconsolata', monospace;
+  font-size: 18px;
+  color: #fff;
+  background-color: #000;
+  outline: none;
+  width: 98%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: none;
+  border: none;
+  line-height: normal;
+}
+

@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
+
+.terminal-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.terminal-container {
+  font-optical-sizing: auto;
+  position: absolute;
+  top: 2%;
+  right: 1%;
+  bottom: 2%;
+  left: 1%;
+  outline: orangered solid 2px;
+  border-radius: 5px;
+  padding-left: 0.5%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+.user-input-line {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+

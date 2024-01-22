@@ -1,0 +1,19 @@
+[
+  {
+    "name": "default",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#FCE94F",
+        "atColor": "#FB976B",
+        "hostnameColor": "#AB9DF2"
+      },
+      "font": {
+        "family": "Inconsolata",
+        "size": "12"
+      },
+      "backgroundColor": "black",
+      "primaryColor": "white",
+      "secondaryColor": "cyan"
+    }
+  }
+]

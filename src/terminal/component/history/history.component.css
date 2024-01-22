@@ -1,0 +1,18 @@
+.terminal-output-wrapper {
+  max-height: 95%;
+  overflow-y: auto;
+}
+
+.terminal-output {
+  font-family: monospace;
+  color: white;
+}
+.terminal-output__prompt {
+
+}
+
+.terminal-output__output {
+
+}
+
+

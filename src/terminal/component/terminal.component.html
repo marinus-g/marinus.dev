@@ -1,0 +1,9 @@
+<div class="terminal-background" [ngStyle]="{'background-color': terminalService.theme.terminal.backgroundColor}">
+  <div class="terminal-container">
+    <app-history></app-history>
+    <div class="user-input-line">
+      <app-ps1></app-ps1>
+      <app-input class="flex-grow"></app-input>
+    </div>
+  </div>
+</div>
