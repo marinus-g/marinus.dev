@@ -6,11 +6,8 @@ import {TerminalService} from "../service/terminal.service";
   templateUrl: './terminal.component.html',
   styleUrl: './terminal.component.css'
 })
-export class TerminalComponent implements OnInit {
+export class TerminalComponent {
 
   constructor(protected terminalService: TerminalService) { }
 
-  ngOnInit() {
-    console.log("Hello World!");
-  }
 }

@@ -1,7 +1,9 @@
-a<input #input
+‏ ‎<input #input
          id="terminal-command-input"
          name="terminal-command-input"
          class="terminal-command-input"
          aria-label="terminal-command-input"
          type="text"
+          [ngStyle]="{'color': this.terminalService.theme.terminal.primaryColor}"
+          (input)="resetLastCommandIndex()"
          [(ngModel)]="commandInput">

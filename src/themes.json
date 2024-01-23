@@ -11,9 +11,125 @@
         "family": "Inconsolata",
         "size": "12"
       },
+      "outlineColor": "#cf0606",
+      "outerColor": "black",
+      "backgroundColor": "#363431",
+      "primaryColor": "white",
+      "secondaryColor": "cyan"
+    }
+  },
+  {
+    "name": "darker",
+    "terminal": {
+      "ps1": {
+        "nameColor": "gray",
+        "atColor": "blue",
+        "hostnameColor": "red"
+      },
+      "font": {
+        "family": "Inconsolata",
+        "size": "12"
+      },
+      "outlineColor": "red",
+      "outerColor": "black",
       "backgroundColor": "black",
       "primaryColor": "white",
       "secondaryColor": "cyan"
+    }
+  },
+  {
+    "name": "randomTheme1",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#51fc87",
+        "atColor": "#423f49",
+        "hostnameColor": "#0bc159"
+      },
+      "font": {
+        "family": "Arial",
+        "size": "12"
+      },
+      "outlineColor": "#753aa5",
+      "outerColor": "#414dde",
+      "backgroundColor": "#8bd6ef",
+      "primaryColor": "#22ea08",
+      "secondaryColor": "#c7747c"
+    }
+  },
+  {
+    "name": "randomTheme2",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#dd5a37",
+        "atColor": "#c316c0",
+        "hostnameColor": "#75bac1"
+      },
+      "font": {
+        "family": "Lucida Console",
+        "size": "10"
+      },
+      "outlineColor": "#d615c5",
+      "outerColor": "#6281b8",
+      "backgroundColor": "#094346",
+      "primaryColor": "#4d26fd",
+      "secondaryColor": "#4bb6f5"
+    }
+  },
+  {
+    "name": "randomTheme3",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#3e1670",
+        "atColor": "#608fcd",
+        "hostnameColor": "#3e6658"
+      },
+      "font": {
+        "family": "Ubuntu Mono",
+        "size": "11"
+      },
+      "outlineColor": "#d00283",
+      "outerColor": "#46c70f",
+      "backgroundColor": "#c5835a",
+      "primaryColor": "#64a861",
+      "secondaryColor": "#78f122"
+    }
+  },
+  {
+    "name": "randomTheme4",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#5dcb53",
+        "atColor": "#7748e6",
+        "hostnameColor": "#49d22e"
+      },
+      "font": {
+        "family": "Courier New",
+        "size": "16"
+      },
+      "outlineColor": "#c02cd5",
+      "outerColor": "#300ada",
+      "backgroundColor": "#14667a",
+      "primaryColor": "#dc0316",
+      "secondaryColor": "#bb92db"
+    }
+  },
+  {
+    "name": "randomTheme5",
+    "terminal": {
+      "ps1": {
+        "nameColor": "#d58dd9",
+        "atColor": "#dcf712",
+        "hostnameColor": "#0ff24c"
+      },
+      "font": {
+        "family": "Verdana",
+        "size": "15"
+      },
+      "outlineColor": "#3014ac",
+      "outerColor": "#42b66b",
+      "backgroundColor": "#672f24",
+      "primaryColor": "#a15427",
+      "secondaryColor": "#27193d"
     }
   }
 ]

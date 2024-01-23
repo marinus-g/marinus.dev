@@ -26,6 +26,5 @@ import {FormsModule} from "@angular/forms";
 export class TerminalModule {
 
   constructor() {
-    console.log("TerminalModule")
   }
 }

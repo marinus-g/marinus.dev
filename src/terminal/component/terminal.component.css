@@ -9,14 +9,14 @@
   overflow: hidden;
 }
 
-.terminal-container {
+.terminal-container {;
   font-optical-sizing: auto;
   position: absolute;
   top: 2%;
   right: 1%;
   bottom: 2%;
   left: 1%;
-  outline: orangered solid 2px;
+  outline:  solid 2px;
   border-radius: 5px;
   padding-left: 0.5%;
   padding-top: 0;

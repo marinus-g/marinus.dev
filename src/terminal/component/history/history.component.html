@@ -10,17 +10,20 @@
         [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace', 'color': terminalService.theme.terminal.ps1.hostnameColor}">marinus.dev</span>
       <span
         [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace', 'color': terminalService.theme.terminal.primaryColor}">:~$</span>
-      <span [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace'}"
-            class="terminal-output terminal-output__prompt" [innerHTML]="history.prompt"></span>
+      <span [ngStyle]="{'font-family': terminalService.theme.terminal.font.family + ', monospace', 'color': terminalService.theme.terminal.primaryColor}"
+            class="terminal-output terminal-output__prompt">{{history.prompt}}</span>
     </h1>
     }
     @if (history.output) {
-      <h1>
-
+      <h1 class="history-output-style">
         @if (history.historyType == HistoryType.BANNER) {
           <pre class="terminal-output__output"
                 [ngStyle]="{'color': terminalService.theme.terminal.primaryColor, 'font-family': terminalService.theme.terminal.font.family + ', Courier New, Courier, monospace'}"
                 *ngFor="let line of history.output.split('\n')">{{ line }}</pre>
+        } @else if (history.historyType == HistoryType.LINE_WRAP) {
+          <pre class="terminal-output__output"
+               [ngStyle]="{'color': terminalService.theme.terminal.primaryColor, 'font-family': terminalService.theme.terminal.font.family + ', Courier New, Courier, monospace'}"
+               *ngFor="let line of history.output.split('\n')">{{ line }}</pre>
         } @else {
           <span class="terminal-output__output"
                 [ngStyle]="{'color': terminalService.theme.terminal.primaryColor, 'font-family': terminalService.theme.terminal.font.family + ', monospace'}"

@@ -11,9 +11,10 @@ export interface Theme {
       family: string;
       size: string;
     }
+    outlineColor: string
+    outerColor: string;
     backgroundColor: string;
     primaryColor: string;
     secondaryColor: string;
   };
-
 }

@@ -12,7 +12,10 @@
 }
 
 .terminal-output__output {
-
+  line-height: 0;
 }
 
 
+.history-output-style {
+  line-height: 0;
+}

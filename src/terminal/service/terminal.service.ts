@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector, runInInjectionContext} from '@angular/core';
 import {Theme} from "../theme/theme";
 import themes from '../../themes.json';
 import {History, HistoryType} from "../model/history";
@@ -16,11 +16,12 @@ export class TerminalService {
   private _theme: Theme = this._themes[0];
   private header: string | null = "Welcome to my Website!";
   private _history: History[] = [];
+  private _commandHistory: string[] = [];
+  private _lastCommandIndex = -1;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer, private injector: Injector) {
 
-
-     // TODO: FIX SPACES
+    // TODO: FIX SPACES
     this.appendHistory({
       prompt: null,
       historyType: HistoryType.BANNER,
@@ -31,7 +32,7 @@ export class TerminalService {
         " |     \\/   ||     \\ |     \\ |    ||     \\| ||  |_| | `-.`-.  _ |      \\|   ___| \\  \\//  \n" +
         " |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   \n" +
         "                                                                                         \n" +
-        "                                                                                         \n"  +
+        "                                                                                         \n" +
         "Login as: guest\n" +
         "guest's password:\n" +
         "" +
@@ -41,10 +42,30 @@ export class TerminalService {
     new Commands();
   }
 
+
+  set lastCommandIndex(value: number) {
+    this._lastCommandIndex = value;
+  }
+
+
+  get lastCommandIndex(): number {
+    return this._lastCommandIndex;
+  }
+
+  get commandHistory(): string[] {
+    return this._commandHistory;
+  }
+
   handleCommand(command: string): void {
     const splittedCommand = command.split(" ");
     const commandName = splittedCommand[0];
-    const args = splittedCommand.slice(1);
+    if (commandName == "!!") {
+      this.handleCommand(this._commandHistory[this._commandHistory.length - 1]);
+      return;
+    }
+    const args = splittedCommand.slice(1).filter(value => value.length > 0);
+    this._commandHistory.push(command);
+    this.lastCommandIndex = -1;
     if (!commandRegistry.has(commandName)) {
       this.appendHistory({
         prompt: " " + command,
@@ -53,32 +74,37 @@ export class TerminalService {
       })
       return;
     }
-    const commandFunction = commandRegistry.get(commandName);
-    if (commandFunction) {
-      const output = commandFunction(args);
-      if (output === undefined) {
-        this.clearHistory()
-        return;
-      }
-      console.log(output)
-      if (this.isHistory(output)) {
-        const historyAsUnknown = output as unknown;
-        const history = historyAsUnknown as History;
-        this.appendHistory(history)
+    runInInjectionContext(this.injector, () => {
+      const commandFunction = commandRegistry.get(commandName);
+      if (commandFunction) {
+        const output = commandFunction(args);
+        if (output === undefined) {
+          this.clearHistory()
+          return;
+        }
+        if (this.isHistory(output)) {
+          const historyAsUnknown = output as unknown;
+          const history = historyAsUnknown as History;
+          this.appendHistory(history)
+          return;
+        }
+        this.appendHistory({
+          prompt: " " + command,
+          output: output,
+          historyType: HistoryType.NORMAL
+        })
         return;
       }
       this.appendHistory({
         prompt: " " + command,
-        output: output,
+        output: command + ": A error occurred while executing the command!.",
         historyType: HistoryType.NORMAL
       })
-      return;
-    }
-    this.appendHistory({
-      prompt: " " + command,
-      output: command + ": A error occurred while executing the command!.",
-      historyType: HistoryType.NORMAL
-    })
+    });
+  }
+
+  public findTheme(themeName: string): Theme | undefined {
+    return this.themes.find(theme => theme.name.toLowerCase() == themeName.toLowerCase());
   }
 
   get theme(): Theme {
@@ -116,5 +142,14 @@ export class TerminalService {
     } catch (e) {
       return false
     }
+  }
+
+
+  get themes(): Theme[] {
+    return this._themes;
+  }
+
+  set themes(value: Theme[]) {
+    this._themes = value;
   }
 }

@@ -6,13 +6,13 @@ import {TerminalService} from "../../service/terminal.service";
   templateUrl: './input.component.html',
   styleUrl: './input.component.css'
 })
-export class InputComponent implements AfterViewInit{
+export class InputComponent implements AfterViewInit {
 
   @ViewChild('input') inputField: ElementRef | undefined;
 
-  protected commandInput: string = '';
+  public commandInput: string = "";
 
-  constructor(private terminalService: TerminalService) {
+  constructor(protected terminalService: TerminalService) {
   }
 
 
@@ -34,19 +34,44 @@ export class InputComponent implements AfterViewInit{
 
   @HostListener('document:mouseup', ['$event'])
   onGlobalMouseUp(event: MouseEvent): void {
-    setTimeout(() => this.inputField?.nativeElement.focus(), 1000);
+    setTimeout(() => this.inputField?.nativeElement.focus(), 100);
   }
+
+  @HostListener('keydown.ArrowUp', ['$event'])
+  onArrowUp(event: Event) {
+    if (event.target != this.inputField?.nativeElement) {
+      return;
+    }
+    event.preventDefault();
+    if (this.terminalService.commandHistory.length === 0) {
+      return;
+    }
+    if (this.terminalService.lastCommandIndex === -1) {
+      this.terminalService.lastCommandIndex = this.terminalService.commandHistory.length;
+    }
+    this.terminalService.lastCommandIndex = Math.max(0, this.terminalService.lastCommandIndex - 1);
+
+    this.commandInput = this.terminalService.commandHistory[this.terminalService.lastCommandIndex];
+    if (this.inputField && this.inputField.nativeElement) {
+      (this.inputField.nativeElement as HTMLInputElement).value = this.commandInput;
+    }
+  }
+
   @HostListener('keydown.enter', ['$event'])
   onEnter(event: Event) {
     if (event.target != this.inputField?.nativeElement) {
       return;
-    }    event.preventDefault();
-    console.log("pressed enter " + this.commandInput)
-    if (this.commandInput.replace(/\s/g, '').length === 0) {
+    }
+    event.preventDefault();
+    if (this.commandInput == undefined || this.commandInput.replace(/\s/g, '').length === 0) {
       this.terminalService.appendEmptyHistory()
       return;
     }
     this.terminalService.handleCommand(this.commandInput)
     this.commandInput = '';
+  }
+
+  resetLastCommandIndex() {
+    this.terminalService.lastCommandIndex = -1;
   }
 }
