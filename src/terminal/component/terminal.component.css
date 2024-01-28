@@ -27,8 +27,6 @@
 .user-input-line {
   display: flex;
   align-items: stretch;
-  position: relative;
-
 }
 
 .flex-grow {

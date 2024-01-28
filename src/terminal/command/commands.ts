@@ -48,6 +48,26 @@ export class Commands {
   }
 
 
+  @Command('repo', "repo - show the repository", ["repo"])
+  repoCommand(): string {
+    window.open("https://github.com/marinus-g/marinus.dev", "_blank")
+    return "Opened repository in new tab!"
+  }
+
+  @Command('github', "github - show the github", ["github"])
+  githubCommand(): History {
+    const terminalService = inject(TerminalService);
+    return {
+      prompt: " github",
+      historyType: HistoryType.INNER_HTML,
+      output: () => {
+        return "<span style='color: " + terminalService.theme.terminal.highlightColor + ";'>Auf meinen Github Accounts finden Sie viele öffentliche Repositories.\n" +
+          "<a style='color: " + terminalService.theme.terminal.clickableColor + ";' target='_blank' href=\"https://github.com/marinus-g\">Github</a>\n" +
+          "<a style='color: " + terminalService.theme.terminal.clickableColor + ";' target='_blank' href='https://github.com/Vantrex'>Privates Github</a></span>"
+      }
+    }
+  }
+
   @Command('banner', "banner - show the banner", ["banner"])
   bannerCommand(): History {
     return {
@@ -62,12 +82,66 @@ export class Commands {
         " ░███ ░███ ░███  ███░░███  ░███      ░███  ░███ ░███  ░███ ░███  ░░░░███   ░███ ░███ ░███░░░   ░░███ ███  \n" +
         " █████░███ █████░░████████ █████     █████ ████ █████ ░░████████ ██████  ██░░████████░░██████   ░░█████   \n" +
         "░░░░░ ░░░ ░░░░░  ░░░░░░░░ ░░░░░     ░░░░░ ░░░░ ░░░░░   ░░░░░░░░ ░░░░░░  ░░  ░░░░░░░░  ░░░░░░     ░░░░░    \n" +
-        "                                                                                                          \n" +
-        "Welcome to my Website!                                                                                                          \n" +
+        "\n" +
+        "Welcome to my Website!\n" +
         "                                                                                                          "
     }
   }
 
+  @Command('reload', "reload - reload the page", ["reload"], ["rl", "refresh"])
+  reloadCommand(): string {
+    window.location.reload()
+    return "Reloading the page.."
+  }
+
+  @Command('ping', "ping - ping a ip or domain", ["ping <ip/domain>"], ["p"])
+  pingCommand(args: string[]): History {
+    if (args.length == 0) {
+      return {
+        prompt: " ping",
+        historyType: HistoryType.LINE_WRAP,
+        output: "usage: ping <ip/domain>"
+      }
+    }
+    const ip = args[0];
+    const terminalService = inject(TerminalService);
+    terminalService.disableInput = true;
+    const history = {
+      prompt: " ping " + ip,
+      historyType: HistoryType.LINE_WRAP,
+      output: "PING " + ip
+    }
+    const times: number[] = [];
+    let pings = 0;
+    let timeout = false;
+    for (let i = 0; i < 3; i++) {
+      if (terminalService.breakForLoops) {
+        history.output = history.output + "\nRequest canceled!"
+        break;
+      }
+      setTimeout(() => {
+        pings++;
+        terminalService.ping(ip).then(value => {
+          history.output = history.output + "\n64 bytes from " + ip + ": icmp_seq=1 ttl=64 time=" + value + "ms"
+          times.push(value);
+        }).catch(reason => {
+          if (timeout) {
+            return;
+          }
+          timeout = true;
+          history.output = history.output + "\nRequest timed out!"
+        }).finally(() => {
+          if (i == 2) {
+            terminalService.disableInput = false;
+            const avg = times.reduce((a, b) => a + b, 0) / times.length;
+            history.output = history.output + "\n--- " + ip + " ping statistics ---\n";
+            history.output = history.output + " " + pings +  " packets transmitted, " + times.length + " received, " + Math.round(100 - (times.length / pings * 100)) + "% packet loss, avg response time " + (avg.toString() == 'NaN' ? '-1' : Math.round(avg)) + "ms\n";
+          }
+        })
+      }, i * 1000)
+    }
+    return history;
+  }
 }
 
 export function displayThemeHelp(terminalService: TerminalService): History {

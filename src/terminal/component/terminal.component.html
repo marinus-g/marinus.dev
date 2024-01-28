@@ -5,9 +5,12 @@
     'outline-color': terminalService.theme.terminal.outlineColor,}"
     class="terminal-container">
     <app-history></app-history>
-    <div class="user-input-line">
-      <app-ps1></app-ps1>
-      <app-input class="flex-grow"></app-input>
-    </div>
+
+    @if (!terminalService.disableInput) {
+      <div class="user-input-line">
+        <app-ps1></app-ps1>
+        <app-input class="flex-grow"></app-input>
+      </div>
+    }
   </div>
 </div>

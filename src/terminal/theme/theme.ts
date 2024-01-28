@@ -16,5 +16,9 @@ export interface Theme {
     backgroundColor: string;
     primaryColor: string;
     secondaryColor: string;
+    informationColor: string;
+    warningColor: string;
+    highlightColor: string;
+    clickableColor: string;
   };
 }
