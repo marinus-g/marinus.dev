@@ -10,5 +10,7 @@
   box-shadow: none;
   border: none;
   line-height: normal;
+  font-optical-sizing: auto;
+
 }
 

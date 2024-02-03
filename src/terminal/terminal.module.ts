@@ -6,6 +6,9 @@ import {HistoryComponent} from "./component/history/history.component";
 import {TerminalComponent} from "./component/terminal.component";
 import {TerminalRoutingModule} from "./terminal.routes";
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import {DnsService} from "./service/dns.service";
+import {TerminalService} from "./service/terminal.service";
 
 @NgModule({
   declarations: [
@@ -17,7 +20,12 @@ import {FormsModule} from "@angular/forms";
   imports: [
     CommonModule,
     TerminalRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [
+    TerminalService,
+    DnsService,
   ],
   exports: [
     TerminalComponent

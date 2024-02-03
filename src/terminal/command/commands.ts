@@ -3,6 +3,8 @@ import {History, HistoryType} from "../model/history";
 import {commandDescription} from "./command";
 import {TerminalService} from "../service/terminal.service";
 import {inject} from "@angular/core";
+import {DnsService} from "../service/dns.service";
+import {Dns} from "../model/dns";
 
 export class Commands {
 
@@ -95,7 +97,7 @@ export class Commands {
   }
 
   @Command('ping', "ping - ping a ip or domain", ["ping <ip/domain>"], ["p"])
-  pingCommand(args: string[]): History {
+  async pingCommand(args: string[]): Promise<History> {
     if (args.length == 0) {
       return {
         prompt: " ping",
@@ -103,13 +105,31 @@ export class Commands {
         output: "usage: ping <ip/domain>"
       }
     }
-    const ip = args[0];
     const terminalService = inject(TerminalService);
     terminalService.disableInput = true;
+    const domain = args[0];
+    let dns: Dns | undefined = {
+      domain: domain,
+      ip: domain
+    };
+    const dnsService = inject(DnsService);
+    if (!domain.match(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)) {
+      dns = await dnsService.resolveDns(domain);
+    }
+
+    const constDns = dns; // this shit is ugly af - fix me?
+    if (constDns == undefined || constDns.ip == undefined) {
+      terminalService.disableInput = false
+      return {
+        prompt: " ping " + domain,
+        historyType: HistoryType.LINE_WRAP,
+        output: "ping: " + domain + ": Name or service not known"
+      }
+    }
     const history = {
-      prompt: " ping " + ip,
+      prompt: " ping " + constDns.domain,
       historyType: HistoryType.LINE_WRAP,
-      output: "PING " + ip
+      output: "PING " + constDns.domain + " (" + constDns.ip + ") 56(84) bytes of data."
     }
     const times: number[] = [];
     let pings = 0;
@@ -121,8 +141,8 @@ export class Commands {
       }
       setTimeout(() => {
         pings++;
-        terminalService.ping(ip).then(value => {
-          history.output = history.output + "\n64 bytes from " + ip + ": icmp_seq=1 ttl=64 time=" + value + "ms"
+        terminalService.ping(constDns.ip).then(value => {
+          history.output = history.output + "\n64 bytes from " + dns?.domain + " (" + dns?.ip + ")" + ": icmp_seq=1 ttl=64 time=" + value + "ms"
           times.push(value);
         }).catch(reason => {
           if (timeout) {
@@ -134,8 +154,8 @@ export class Commands {
           if (i == 2) {
             terminalService.disableInput = false;
             const avg = times.reduce((a, b) => a + b, 0) / times.length;
-            history.output = history.output + "\n--- " + ip + " ping statistics ---\n";
-            history.output = history.output + " " + pings +  " packets transmitted, " + times.length + " received, " + Math.round(100 - (times.length / pings * 100)) + "% packet loss, avg response time " + (avg.toString() == 'NaN' ? '-1' : Math.round(avg)) + "ms\n";
+            history.output = history.output + "\n--- " + constDns.domain + " ping statistics ---\n";
+            history.output = history.output + " " + pings + " packets transmitted, " + times.length + " received, " + Math.round(100 - (times.length / pings * 100)) + "% packet loss, avg response time " + (avg.toString() == 'NaN' ? '-1' : Math.round(avg)) + "ms\n";
           }
         })
       }, i * 1000)

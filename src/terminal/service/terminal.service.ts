@@ -30,22 +30,22 @@ export class TerminalService {
       historyType: HistoryType.INNER_HTML,
       output: () => {
         return "\n" +
-        "<span style='color: whitesmoke'>  ____    __  ____    _____   ____  ____   _  __   _  ______     _____   ______  __    _ </span>\n" +
-        "<span style='color: whitesmoke'> |    \\  /  ||    \\  |     | |    ||    \\ | ||  | | ||   ___|   |     \\ |   ___|\\  \\  // </span>\n" +
-        "<span style='color: whitesmoke'> |     \\/   ||     \\ |     \\ |    ||     \\| ||  |_| | `-.`-.  _ |      \\|   ___| \\  \\//  </span>\n" +
-        "<span style='color: whitesmoke'> |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   </span>\n" +
-        " \n" +
-        " \n" +
-        "Login as: guest\n" +
-        "guest's password:\n" +
-        " \n" +
-        "Last login: " + date.toDateString() + " " + date.toLocaleTimeString() + " on " + this.getBrowserName() + "\n" +
-        " \n" +
-        "<span style='color: " + this.theme.terminal.highlightColor + ";'><span style='text-decoration-line: underline; color: "+this.theme.terminal.warningColor+"'>Hello World!</span> I´m Marinus.</span!\n" +
-        "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Mit 16 Jahren habe ich meine Leidenschaft für das Programmieren entdeckt.</span>\n" +
-        "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Über 8 Jahre Erfahrung in Java.</span>\n" +
-        "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Schnelle Einarbeitung in neue Sprachen/Frameworks durch langjährige Erfahrung.\n</span>" +
-        "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > In Zukunft strebe ich eine Position als Programmierer in Ihrem Unternehmen an, um meine Fähigkeiten weiter auszubauen\n" +
+          "<span style='color: whitesmoke'>  ____    __  ____    _____   ____  ____   _  __   _  ______     _____   ______  __    _ </span>\n" +
+          "<span style='color: whitesmoke'> |    \\  /  ||    \\  |     | |    ||    \\ | ||  | | ||   ___|   |     \\ |   ___|\\  \\  // </span>\n" +
+          "<span style='color: whitesmoke'> |     \\/   ||     \\ |     \\ |    ||     \\| ||  |_| | `-.`-.  _ |      \\|   ___| \\  \\//  </span>\n" +
+          "<span style='color: whitesmoke'> |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   </span>\n" +
+          " \n" +
+          " \n" +
+          "Login as: guest\n" +
+          "guest's password:\n" +
+          " \n" +
+          "Last login: " + date.toDateString() + " " + date.toLocaleTimeString() + " on " + this.getBrowserName() + "\n" +
+          " \n" +
+          "<span style='color: " + this.theme.terminal.highlightColor + ";'><span style='text-decoration-line: underline; color: " + this.theme.terminal.warningColor + "'>Hello World!</span> I´m Marinus.</span!\n" +
+          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Mit 16 Jahren habe ich meine Leidenschaft für das Programmieren entdeckt.</span>\n" +
+          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Über 8 Jahre Erfahrung in Java.</span>\n" +
+          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Schnelle Einarbeitung in neue Sprachen/Frameworks durch langjährige Erfahrung.\n</span>" +
+          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > In Zukunft strebe ich eine Position als Programmierer in Ihrem Unternehmen an, um meine Fähigkeiten weiter auszubauen\n" +
           "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'>   und einen wesentlichen Beitrag zum Erfolg ihres Unternehmens zu leisten.</span>"
         // "<button style=\"background-color: transparent; color: red; text-decoration-line: underline; border: none; padding: 0;\">Click here</button>, for more information about me"
       }
@@ -67,7 +67,7 @@ export class TerminalService {
     return this._commandHistory;
   }
 
-  handleCommand(command: string): void {
+  async handleCommand(command: string): Promise<void> {
     const splittedCommand = command.split(" ");
     const commandName = splittedCommand[0];
     if (commandName == "!!") {
@@ -79,7 +79,7 @@ export class TerminalService {
         });
         return;
       }
-      this.handleCommand(this._commandHistory[this._commandHistory.length - 1]);
+      await this.handleCommand(this._commandHistory[this._commandHistory.length - 1]);
       return;
     }
     const args = splittedCommand.slice(1).filter(value => value.length > 0);
@@ -105,6 +105,13 @@ export class TerminalService {
         const output = commandFunction(args);
         if (output === undefined) {
           this.clearHistory()
+          return;
+        }
+        if (this.isHistoryPromise(output)) {
+          const history = output;
+          history.then(value => {
+            this.appendHistory(value);
+          })
           return;
         }
         if (this.isHistory(output)) {
@@ -164,10 +171,17 @@ export class TerminalService {
     this._history = [];
   }
 
+  isHistoryPromise(obj: any): obj is Promise<History> {
+    try {
+      return 'then' in obj && 'catch' in obj;
+    } catch (e) {
+      return false
+    }
+  }
+
   isHistory(obj: any): obj is History {
     try {
       return 'prompt' in obj && 'historyType' in obj && 'output' in obj;
-
     } catch (e) {
       return false
     }
@@ -178,9 +192,7 @@ export class TerminalService {
       url = "http://" + url;
     }
     const start = new Date().getTime();
-    const response = await fetch(url, { mode: 'no-cors' });
-    console.log(response)
-
+    const response = await fetch(url, {mode: 'no-cors'});
     if (response.status == 503) {
       throw new Error(`HTTP request failed: ${response.status}`);
     }
