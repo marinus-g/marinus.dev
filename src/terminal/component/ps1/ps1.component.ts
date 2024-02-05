@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {TerminalService} from "../../service/terminal.service";
+import {ContentService} from "../../service/content.service";
 
 @Component({
   selector: 'app-ps1',
@@ -11,5 +12,4 @@ export class Ps1Component {
   constructor(protected terminalService: TerminalService) {
 
   }
-
 }

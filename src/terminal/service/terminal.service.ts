@@ -5,6 +5,7 @@ import {History, HistoryType} from "../model/history";
 import {DomSanitizer} from '@angular/platform-browser';
 import {Commands} from "../command/commands";
 import {commandAliases, commandRegistry} from '../command/command';
+import {ContentService} from "./content.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,9 @@ export class TerminalService {
 
   private _disableInput = false;
   private _breakForLoops = false;
+  private _contentService: ContentService | undefined = undefined;
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
-
     const date = new Date();
     this.appendHistory({
       prompt: null,
@@ -36,18 +37,11 @@ export class TerminalService {
           "<span style='color: whitesmoke'> |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   </span>\n" +
           " \n" +
           " \n" +
-          "Login as: guest\n" +
-          "guest's password:\n" +
+          "Login as: " + this._contentService?.getUserName() + "\n" +
+          this._contentService?.getUserName() + (this._contentService?.getUserName().endsWith("s") ? "" : "`s") + " password:\n" +
           " \n" +
           "Last login: " + date.toDateString() + " " + date.toLocaleTimeString() + " on " + this.getBrowserName() + "\n" +
-          " \n" +
-          "<span style='color: " + this.theme.terminal.highlightColor + ";'><span style='text-decoration-line: underline; color: " + this.theme.terminal.warningColor + "'>Hello World!</span> I´m Marinus.</span!\n" +
-          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Mit 16 Jahren habe ich meine Leidenschaft für das Programmieren entdeckt.</span>\n" +
-          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Über 8 Jahre Erfahrung in Java.</span>\n" +
-          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > Schnelle Einarbeitung in neue Sprachen/Frameworks durch langjährige Erfahrung.\n</span>" +
-          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'> > In Zukunft strebe ich eine Position als Programmierer in Ihrem Unternehmen an, um meine Fähigkeiten weiter auszubauen\n" +
-          "<span style='color: " + this.theme.terminal.informationColor + "; line-height: 0.4'>   und einen wesentlichen Beitrag zum Erfolg ihres Unternehmens zu leisten.</span>"
-        // "<button style=\"background-color: transparent; color: red; text-decoration-line: underline; border: none; padding: 0;\">Click here</button>, for more information about me"
+          " \n"
       }
     })
     new Commands();
@@ -56,6 +50,62 @@ export class TerminalService {
 
   set lastCommandIndex(value: number) {
     this._lastCommandIndex = value;
+  }
+
+  set contentService(value: ContentService) {
+    this._contentService = value;
+  }
+
+  get contentService(): ContentService | undefined {
+    return this._contentService;
+  }
+
+  init(contentService: ContentService) {
+    const terminalService = this;
+
+    function buildInlineHtml(html: string) { // ty copilot for the help. I did not know that you can use "functions" after the replace method.
+      let regex = /\{\[\{(.+?)\}\]\}/g;
+      return html.replace(regex, (match) => {
+        let textInsideBrackets = match.slice(3, -3);
+        let replacement;
+        switch (textInsideBrackets) {
+          case "terminal#informationColor":
+            replacement = terminalService._theme.terminal.informationColor;
+            break;
+          case "terminal#primaryColor":
+            replacement = terminalService._theme.terminal.primaryColor;
+            break;
+          case "terminal#highlightColor":
+            replacement = terminalService._theme.terminal.highlightColor;
+            break
+          case "terminal#warningColor":
+            replacement = terminalService._theme.terminal.warningColor;
+            break;
+          case "terminal#backgroundColor":
+            replacement = terminalService._theme.terminal.backgroundColor;
+            break;
+          case "terminal#clickableColor":
+            replacement = terminalService._theme.terminal.clickableColor;
+            break;
+          default:
+            replacement = "unknown";
+        }
+        return replacement;
+      });
+    }
+
+    contentService.getWelcomeScreenContent().flatMap(value => {
+      return value.welcomeMessage
+    })
+      .forEach(value => {
+        this.appendHistory({
+          prompt: null,
+          historyType: HistoryType.INNER_HTML,
+          output() {
+            return buildInlineHtml(value);
+          }
+        })
+      })
   }
 
 
@@ -178,6 +228,7 @@ export class TerminalService {
       return false
     }
   }
+
 
   isHistory(obj: any): obj is History {
     try {

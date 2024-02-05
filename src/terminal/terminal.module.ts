@@ -9,6 +9,9 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {DnsService} from "./service/dns.service";
 import {TerminalService} from "./service/terminal.service";
+import {LoadingComponent} from "./component/loading/loading.component";
+import {AuthenticationService} from "./service/authentication.service";
+import {ContentService} from "./service/content.service";
 
 @NgModule({
   declarations: [
@@ -21,10 +24,13 @@ import {TerminalService} from "./service/terminal.service";
     CommonModule,
     TerminalRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    LoadingComponent
   ],
   providers: [
     TerminalService,
+    ContentService,
+    AuthenticationService,
     DnsService,
   ],
   exports: [

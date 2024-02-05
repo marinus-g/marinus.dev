@@ -4,12 +4,17 @@
     'background-color': terminalService.theme.terminal.backgroundColor,
     'outline-color': terminalService.theme.terminal.outlineColor,}"
     class="terminal-container">
-    <app-history></app-history>
-
-    @if (!terminalService.disableInput) {
-      <div class="user-input-line">
-        <app-ps1></app-ps1>
-        <app-input class="flex-grow"></app-input>
+    @if (!loading) {
+      <app-history></app-history>
+      @if (!terminalService.disableInput) {
+        <div class="user-input-line">
+          <app-ps1></app-ps1>
+          <app-input class="flex-grow"></app-input>
+        </div>
+      }
+    } @else {
+      <div class="loading">
+        <app-loading></app-loading>
       </div>
     }
   </div>

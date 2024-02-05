@@ -10,11 +10,12 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })
-export class HistoryComponent implements AfterViewChecked{
+export class HistoryComponent implements AfterViewChecked {
 
   @ViewChild('historyContainer') private historyContainer: ElementRef | undefined
 
   constructor(protected terminalService: TerminalService, protected sanitizer: DomSanitizer) {
+
   }
 
   ngAfterViewChecked() {
@@ -37,7 +38,6 @@ export class HistoryComponent implements AfterViewChecked{
   }
 
   openLink(url: string): void {
-    console.log("open link? " + url)
     window.open(url, '_blank');
   }
 

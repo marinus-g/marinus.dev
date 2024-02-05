@@ -9,7 +9,6 @@ export function Command(command: string, description: string, usage: string[], a
     commandDescription.set(command, description)
     commandUsage.set(command, usage.join("\n"))
     if (aliases != undefined) {
-      console.log("aliases: " + aliases)
       aliases.forEach(alias => commandAliases.set(alias, command))
     }
   }

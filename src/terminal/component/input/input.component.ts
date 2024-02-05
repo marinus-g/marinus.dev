@@ -40,7 +40,6 @@ export class InputComponent implements AfterViewInit {
 
   @HostListener('document:mouseup', ['$event'])
   onGlobalMouseUp(event: MouseEvent): void {
-    console.log("mouseup")
     setTimeout(() => this.inputField?.nativeElement.focus(), 50);
   }
 
