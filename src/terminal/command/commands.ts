@@ -1,10 +1,11 @@
 import {Command} from "./command";
 import {History, HistoryType} from "../model/history";
 import {commandDescription} from "./command";
-import {TerminalService} from "../service/terminal.service";
+import {TerminalService} from "../../service/terminal.service";
 import {inject} from "@angular/core";
-import {DnsService} from "../service/dns.service";
+import {DnsService} from "../../service/dns.service";
 import {Dns} from "../model/dns";
+import {UserService} from "../../service/user.service";
 
 export class Commands {
 
@@ -161,6 +162,40 @@ export class Commands {
       }, i * 1000)
     }
     return history;
+  }
+
+  @Command('su', "su - change the user", ["su <user>"])
+  async suCommand(args: string[]): Promise<History> {
+    if (args.length < 1) {
+      return {
+        prompt: " su",
+        historyType: HistoryType.LINE_WRAP,
+        output: "usage: su <user>"
+      }
+    }
+    if (args[0].match("-")) {
+      args[0] = args[0].replace("-", "root")
+    }
+    const userService = inject(UserService)
+    const terminalService = inject(TerminalService);
+    terminalService.disableInput = true;
+    const userExists = await userService.isUserExist(args[0]);
+    if (!userExists) {
+      terminalService.disableInput = false;
+      return {
+        prompt: " su " + args[0],
+        historyType: HistoryType.LINE_WRAP,
+        output: "su: user " + args[0] + " does not exist"
+      }
+    } else {
+      terminalService.disableInput = true; // TODO: Implement user password
+      terminalService.startPasswordInput("Password:")
+      return {
+        prompt: " su " + args[0],
+        historyType: HistoryType.LINE_WRAP,
+        output: ""
+      }
+    }
   }
 }
 

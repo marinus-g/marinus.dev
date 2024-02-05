@@ -5,4 +5,6 @@ export enum END_POINT {
   AUTHENTICATE = BACKEND + '/api/v1/public/authentication/authenticate',
   CONTENT_PROFILE = BACKEND + '/api/v1/content/profile',
   CONTENT_FETCH = BACKEND + '/api/v1/content/fetch',
+  DEFAULT_CONTENT = BACKEND + '/api/v1/content/default',
+  USER_EXISTS = BACKEND + '/api/v1/public/user/{username}/exists',
 }

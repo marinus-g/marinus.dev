@@ -11,6 +11,10 @@
           <app-ps1></app-ps1>
           <app-input class="flex-grow"></app-input>
         </div>
+      } @else if (terminalService.passwordInput) {
+        <div class="user-input-line">
+          <app-password-input class="flex-grow"></app-password-input>
+        </div>
       }
     } @else {
       <div class="loading">

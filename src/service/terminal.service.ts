@@ -1,11 +1,13 @@
-import {Injectable, Injector, runInInjectionContext} from '@angular/core';
-import {Theme} from "../theme/theme";
-import themes from '../../themes.json';
-import {History, HistoryType} from "../model/history";
+import {Injectable, Injector, input, runInInjectionContext} from '@angular/core';
+import {Theme} from "../terminal/theme/theme";
+import themes from '../themes.json';
+import {History, HistoryType} from "../terminal/model/history";
 import {DomSanitizer} from '@angular/platform-browser';
-import {Commands} from "../command/commands";
-import {commandAliases, commandRegistry} from '../command/command';
+import {Commands} from "../terminal/command/commands";
+import {commandAliases, commandRegistry} from '../terminal/command/command';
 import {ContentService} from "./content.service";
+import {AuthenticationService} from "./authentication.service";
+import {window} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +25,11 @@ export class TerminalService {
   private _disableInput = false;
   private _breakForLoops = false;
   private _contentService: ContentService | undefined = undefined;
+  private _passwordInput: boolean = false;
+  private _passwordFieldLabel: string = "";
+  private _userToChangeTo: string = "";
 
-  constructor(private sanitizer: DomSanitizer, private injector: Injector) {
+  constructor(private sanitizer: DomSanitizer, private injector: Injector, private authenticationService: AuthenticationService) {
     const date = new Date();
     this.appendHistory({
       prompt: null,
@@ -294,5 +299,37 @@ export class TerminalService {
       default:
         return 'other';
     }
+  }
+
+  get passwordInput(): boolean {
+    return this._passwordInput;
+  }
+
+  set passwordInput(value: boolean) {
+    this._passwordInput = value;
+  }
+
+  get passwordFieldLabel(): string {
+    return this._passwordFieldLabel;
+  }
+
+
+  get userToChangeTo(): string {
+    return this._userToChangeTo;
+  }
+
+  set userToChangeTo(value: string) {
+    this._userToChangeTo = value;
+  }
+
+  startPasswordInput(label: string) {
+    this._passwordFieldLabel = label;
+    this.passwordInput = true;
+  }
+
+  handlePasswordInput(input: string) {
+    this.passwordInput = false;
+    this._passwordFieldLabel = "";
+    this.authenticationService.authenticate({login: this._userToChangeTo, password: input})
   }
 }

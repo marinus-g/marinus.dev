@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {END_POINT} from "../../util/consts";
-import {Dns} from "../model/dns";
+import {END_POINT} from "../util/consts";
+import {Dns} from "../terminal/model/dns";
 import {firstValueFrom} from "rxjs";
 
 @Injectable({

@@ -7,11 +7,13 @@ import {TerminalComponent} from "./component/terminal.component";
 import {TerminalRoutingModule} from "./terminal.routes";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {DnsService} from "./service/dns.service";
-import {TerminalService} from "./service/terminal.service";
+import {DnsService} from "../service/dns.service";
+import {TerminalService} from "../service/terminal.service";
 import {LoadingComponent} from "./component/loading/loading.component";
-import {AuthenticationService} from "./service/authentication.service";
-import {ContentService} from "./service/content.service";
+import {AuthenticationService} from "../service/authentication.service";
+import {ContentService} from "../service/content.service";
+import {UserService} from "../service/user.service";
+import {PasswordInputComponent} from "./component/input/password-input/password-input.component";
 
 @NgModule({
   declarations: [
@@ -25,10 +27,12 @@ import {ContentService} from "./service/content.service";
     TerminalRoutingModule,
     FormsModule,
     HttpClientModule,
-    LoadingComponent
+    LoadingComponent,
+    PasswordInputComponent
   ],
   providers: [
     TerminalService,
+    UserService,
     ContentService,
     AuthenticationService,
     DnsService,

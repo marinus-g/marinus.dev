@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, input, ViewChild} from '@angular/core';
-import {TerminalService} from "../../service/terminal.service";
+import {TerminalService} from "../../../service/terminal.service";
 
 @Component({
   selector: 'app-input',

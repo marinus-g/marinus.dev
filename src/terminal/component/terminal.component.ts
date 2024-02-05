@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {TerminalService} from "../service/terminal.service";
+import {TerminalService} from "../../service/terminal.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../service/authentication.service";
-import {ContentService} from "../service/content.service";
+import {AuthenticationService} from "../../service/authentication.service";
+import {ContentService} from "../../service/content.service";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -39,25 +39,34 @@ export class TerminalComponent implements OnInit {
   }
 
   private init() {
-    this.contentService.getContentProfile()
-      .then(value => {
-        this.contentService.contentProfile = value;
-      })
-      .finally(() => {
-        this.contentService.getContent().then(json => {
-          for (let valueKey in json) {
-            if (json.hasOwnProperty(valueKey)) {
-              const valueElement =  (json as any)[valueKey];
-              this.contentService.parseJsonObject(valueElement)
-            }
-          }
+    if (this.authService.isLoginCookieSet()) {
+      this.contentService.getContentProfile()
+        .then(value => {
+          this.contentService.contentProfile = value;
         })
-          .finally(() => {
-            this.terminalService.init(this.contentService)
-            setTimeout(() => {
-              this._loading = false;
-            }, 100)
-          })
+        .finally(() => {
+          this.loadContentProfile(100)
+        })
+      return
+    }
+    this.loadContentProfile(500)
+  }
+
+  private loadContentProfile(delay: number) {
+    const contentPromise: Promise<JSON> = this.contentService.contentProfile == null ? this.contentService.getDefaultContent() : this.contentService.getContent();
+    contentPromise.then(json => {
+      for (let valueKey in json) {
+        if (json.hasOwnProperty(valueKey)) {
+          const valueElement =  (json as any)[valueKey];
+          this.contentService.parseJsonObject(valueElement)
+        }
+      }
+    })
+      .finally(() => {
+        this.terminalService.init(this.contentService)
+        setTimeout(() => {
+          this._loading = false;
+        }, delay)
       })
   }
 

@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
 
 .ps1-wrapper {
-  margin: 0; /* Add this line */
-  display: inline-block; /* Add this line */
+  margin: 0;
+  display: inline-block;
 }
 
 
