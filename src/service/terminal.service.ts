@@ -7,6 +7,7 @@ import {Commands} from "../terminal/command/commands";
 import {commandAliases, commandRegistry} from '../terminal/command/command';
 import {ContentService} from "./content.service";
 import {AuthenticationService} from "./authentication.service";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -28,9 +29,11 @@ export class TerminalService {
   private _passwordFieldLabel: string = "";
   private _userToChangeTo: string = "";
 
-  constructor(private sanitizer: DomSanitizer, private injector: Injector, private authenticationService: AuthenticationService) {
+
+  constructor(private sanitizer: DomSanitizer, private injector: Injector, private authenticationService: AuthenticationService, private userService: UserService) {
     const date = new Date();
     this.appendHistory({
+      username: this._contentService?.getUserName(),
       prompt: null,
       historyType: HistoryType.INNER_HTML,
       output: () => {
@@ -103,6 +106,7 @@ export class TerminalService {
     })
       .forEach(value => {
         this.appendHistory({
+          username: this._contentService?.getUserName(),
           prompt: null,
           historyType: HistoryType.INNER_HTML,
           output() {
@@ -127,6 +131,7 @@ export class TerminalService {
     if (commandName == "!!") {
       if (this._commandHistory.length == 0) {
         this.appendHistory({
+          username: this._contentService?.getUserName(),
           prompt: " !!",
           output: "No commands in history.",
           historyType: HistoryType.NORMAL
@@ -141,6 +146,7 @@ export class TerminalService {
     this.lastCommandIndex = -1;
     if (!commandRegistry.has(commandName) && !commandAliases.has(commandName)) {
       this.appendHistory({
+        username: this._contentService?.getUserName(),
         prompt: " " + command,
         output: command + ": command not found. Type 'help' for more information.",
         historyType: HistoryType.NORMAL
@@ -175,6 +181,7 @@ export class TerminalService {
           return;
         }
         this.appendHistory({
+          username: this._contentService?.getUserName(),
           prompt: " " + command,
           output: output,
           historyType: HistoryType.NORMAL
@@ -182,6 +189,7 @@ export class TerminalService {
         return;
       }
       this.appendHistory({
+        username: this._contentService?.getUserName(),
         prompt: " " + command,
         output: command + ": A error occurred while executing the command!.",
         historyType: HistoryType.NORMAL
@@ -215,6 +223,7 @@ export class TerminalService {
 
   appendEmptyHistory(): void {
     this._history.push({
+      username: this._contentService?.getUserName(),
       prompt: "",
       output: "",
       historyType: HistoryType.NORMAL
@@ -329,6 +338,29 @@ export class TerminalService {
   handlePasswordInput(input: string) {
     this.passwordInput = false;
     this._passwordFieldLabel = "";
-    this.authenticationService.authenticate({login: this._userToChangeTo, password: input})
+    this.authenticationService.authenticate({login: this._userToChangeTo, password: input}).then(value => {
+      if (value == undefined) {
+        this.disableInput = false;
+        this.appendHistory({
+          username: this._contentService?.getUserName(),
+          prompt: " su " + this._userToChangeTo,
+          historyType: HistoryType.LINE_WRAP,
+          output: "su: Authentication failure"
+        })
+        return;
+      }
+      const nameBeforeChange = this._contentService?.getUserName();
+      this.userService.updaterRegisteredUser()
+        .finally(() => {
+          this._history = this._history.slice(0, this.history.length - 1)
+          this.appendHistory({
+            username: nameBeforeChange,
+            prompt: " su " + this._userToChangeTo,
+            historyType: HistoryType.LINE_WRAP,
+            output: "Logged in as " + this._userToChangeTo + " successfully!"
+          })
+          this.disableInput = false;
+        })
+    })
   }
 }

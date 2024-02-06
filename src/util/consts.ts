@@ -7,4 +7,5 @@ export enum END_POINT {
   CONTENT_FETCH = BACKEND + '/api/v1/content/fetch',
   DEFAULT_CONTENT = BACKEND + '/api/v1/content/default',
   USER_EXISTS = BACKEND + '/api/v1/public/user/{username}/exists',
+  CURRENT_USER = BACKEND + '/api/v1/user',
 }

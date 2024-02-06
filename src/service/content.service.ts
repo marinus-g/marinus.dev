@@ -5,6 +5,7 @@ import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../util/consts";
 import {TerminalService} from "./terminal.service";
 import {Content, WelcomeScreenContent} from "../terminal/model/content";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ContentService {
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
 
-  constructor(private http: HttpClient, private terminalService: TerminalService) {
+  constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService) {
     this.terminalService.contentService = this
   }
 
@@ -67,7 +68,7 @@ export class ContentService {
   }
 
   getUserName(): string {
-    return this._contentProfile ? this._contentProfile.guestUser.username :  "guest";
+    return this.userService.registeredUser != null ? this.userService.registeredUser.username : this._contentProfile && this.contentProfile?.guestUser ? this._contentProfile.guestUser.username :  "guest";
   }
 
   getWelcomeScreenContent(): WelcomeScreenContent[] {

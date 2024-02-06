@@ -1,6 +1,7 @@
 import {StringCallback} from "../../util/Callback";
 
 export interface History {
+  username: string | undefined
   prompt: string | null;
   historyType: HistoryType;
   output: string | StringCallback;

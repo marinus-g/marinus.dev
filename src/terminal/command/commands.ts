@@ -6,6 +6,7 @@ import {inject} from "@angular/core";
 import {DnsService} from "../../service/dns.service";
 import {Dns} from "../model/dns";
 import {UserService} from "../../service/user.service";
+import {ContentService} from "../../service/content.service";
 
 export class Commands {
 
@@ -14,11 +15,13 @@ export class Commands {
 
   @Command('help', "help  - list all commands", ["help"])
   helpCommand(): History {
+    const contentService = inject(ContentService);
     const output: string[] = [];
     commandDescription.forEach((value, key) => {
       output.push(`${value}`)
     });
     return {
+      username: contentService.getUserName(),
       prompt: " help",
       historyType: HistoryType.LINE_WRAP,
       output: output.join("\n")
@@ -60,7 +63,9 @@ export class Commands {
   @Command('github', "github - show the github", ["github"])
   githubCommand(): History {
     const terminalService = inject(TerminalService);
+    const contentService = inject(ContentService);
     return {
+      username: contentService.getUserName(),
       prompt: " github",
       historyType: HistoryType.INNER_HTML,
       output: () => {
@@ -73,7 +78,9 @@ export class Commands {
 
   @Command('banner', "banner - show the banner", ["banner"])
   bannerCommand(): History {
+    const contentService = inject(ContentService);
     return {
+      username: contentService.getUserName(),
       prompt: " banner",
       historyType: HistoryType.BANNER,
       output: "" +
@@ -99,8 +106,10 @@ export class Commands {
 
   @Command('ping', "ping - ping a ip or domain", ["ping <ip/domain>"], ["p"])
   async pingCommand(args: string[]): Promise<History> {
+    const contentService = inject(ContentService);
     if (args.length == 0) {
       return {
+        username: contentService.getUserName(),
         prompt: " ping",
         historyType: HistoryType.LINE_WRAP,
         output: "usage: ping <ip/domain>"
@@ -122,12 +131,14 @@ export class Commands {
     if (constDns == undefined || constDns.ip == undefined) {
       terminalService.disableInput = false
       return {
+        username: contentService.getUserName(),
         prompt: " ping " + domain,
         historyType: HistoryType.LINE_WRAP,
         output: "ping: " + domain + ": Name or service not known"
       }
     }
     const history = {
+      username: contentService.getUserName(),
       prompt: " ping " + constDns.domain,
       historyType: HistoryType.LINE_WRAP,
       output: "PING " + constDns.domain + " (" + constDns.ip + ") 56(84) bytes of data."
@@ -166,8 +177,10 @@ export class Commands {
 
   @Command('su', "su - change the user", ["su <user>"])
   async suCommand(args: string[]): Promise<History> {
+    const contentService = inject(ContentService);
     if (args.length < 1) {
       return {
+        username: contentService.getUserName(),
         prompt: " su",
         historyType: HistoryType.LINE_WRAP,
         output: "usage: su <user>"
@@ -183,14 +196,17 @@ export class Commands {
     if (!userExists) {
       terminalService.disableInput = false;
       return {
+        username: contentService.getUserName(),
         prompt: " su " + args[0],
         historyType: HistoryType.LINE_WRAP,
         output: "su: user " + args[0] + " does not exist"
       }
     } else {
       terminalService.disableInput = true; // TODO: Implement user password
+      terminalService.userToChangeTo = args[0];
       terminalService.startPasswordInput("Password:")
       return {
+        username: contentService.getUserName(),
         prompt: " su " + args[0],
         historyType: HistoryType.LINE_WRAP,
         output: ""
@@ -200,7 +216,9 @@ export class Commands {
 }
 
 export function displayThemeHelp(terminalService: TerminalService): History {
+  const username = inject(ContentService).getUserName();
   return {
+    username: username,
     prompt: " theme",
     historyType: HistoryType.LINE_WRAP,
     output: "Current theme: " + terminalService.theme.name + "\n" +
