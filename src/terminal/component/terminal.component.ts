@@ -39,15 +39,17 @@ export class TerminalComponent implements OnInit {
   }
 
   private init() {
-    if (this.authService.isLoginCookieSet()) {
+    if (this.authService.isContentProfileTokenSet()) {
       this.contentService.getContentProfile()
         .then(value => {
           this.contentService.contentProfile = value;
         })
         .finally(() => {
-          this.loadContentProfile(100)
+          this.loadContentProfile(300)
         })
       return
+    } else {
+      this.authService.deleteRegisteredUserToken();
     }
     this.loadContentProfile(500)
   }
@@ -63,6 +65,7 @@ export class TerminalComponent implements OnInit {
       }
     })
       .finally(() => {
+        this.terminalService.contentService = this.contentService;
         this.terminalService.init(this.contentService)
         setTimeout(() => {
           this._loading = false;

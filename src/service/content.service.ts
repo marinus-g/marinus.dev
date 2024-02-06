@@ -16,10 +16,10 @@ export class ContentService {
   private _contentArray: Content[] = [];
 
   constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService) {
-    this.terminalService.contentService = this
   }
 
   public async getContentProfile(): Promise<ContentProfile> {
+
     const response$ = this.http.get<ContentProfile>(END_POINT.CONTENT_PROFILE, {
       observe: 'response',
       withCredentials: true

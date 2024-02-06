@@ -26,8 +26,15 @@ export class AuthenticationService {
     }
   }
 
-  public isLoginCookieSet(): boolean {
-    return document.cookie.split(';').some((item) => item.trim().startsWith('login='));
+  public isContentProfileTokenSet(): boolean {
+    return document.cookie.split(';').some((item) => item.trim().startsWith('token=1%%'));
+  }
+
+  public deleteContentProfileToken() {
+    document.cookie = document.cookie.replace(/(token=1%%[^;]*;?)/, 'token=1%%=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;');
+  }
+  public deleteRegisteredUserToken() {
+    document.cookie = document.cookie.replace(/(token=0%%[^;]*;?)/, 'token=0%%=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;');
   }
 }
 

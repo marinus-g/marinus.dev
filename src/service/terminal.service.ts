@@ -31,6 +31,17 @@ export class TerminalService {
 
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector, private authenticationService: AuthenticationService, private userService: UserService) {
+    new Commands();
+  }
+
+
+  set lastCommandIndex(value: number) {
+    this._lastCommandIndex = value;
+  }
+
+  set contentService(value: ContentService) {
+    this._contentService = value;
+    const loginUserName = this._contentService?.getUserName();
     const date = new Date();
     this.appendHistory({
       username: this._contentService?.getUserName(),
@@ -44,23 +55,13 @@ export class TerminalService {
           "<span style='color: whitesmoke'> |__/\\__/|__||__|\\__\\|__|\\__\\|____||__/\\____||______||______||_||______/|______|  \\__/   </span>\n" +
           " \n" +
           " \n" +
-          "Login as: " + this._contentService?.getUserName() + "\n" +
-          this._contentService?.getUserName() + (this._contentService?.getUserName().endsWith("s") ? "" : "`s") + " password:\n" +
+          "Login as: " + loginUserName + "\n" +
+          loginUserName + (loginUserName.endsWith("s") ? "" : "`s") + " password:\n" +
           " \n" +
           "Last login: " + date.toDateString() + " " + date.toLocaleTimeString() + " on " + this.getBrowserName() + "\n" +
           " \n"
       }
     })
-    new Commands();
-  }
-
-
-  set lastCommandIndex(value: number) {
-    this._lastCommandIndex = value;
-  }
-
-  set contentService(value: ContentService) {
-    this._contentService = value;
   }
 
   get contentService(): ContentService | undefined {
