@@ -7,7 +7,6 @@ import {Commands} from "../terminal/command/commands";
 import {commandAliases, commandRegistry} from '../terminal/command/command';
 import {ContentService} from "./content.service";
 import {AuthenticationService} from "./authentication.service";
-import {window} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
