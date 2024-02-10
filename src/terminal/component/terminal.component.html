@@ -1,9 +1,28 @@
-<div class="terminal-background" [ngStyle]="{'background-color': terminalService.theme.terminal.backgroundColor}">
-  <div class="terminal-container">
-    <app-history></app-history>
-    <div class="user-input-line">
-      <app-ps1></app-ps1>
-      <app-input class="flex-grow"></app-input>
-    </div>
+<div class="terminal-background" [ngStyle]="{'background-color': terminalService.theme.terminal.outerColor}">
+  <div
+    [ngStyle]="{
+    'background-color': terminalService.theme.terminal.backgroundColor,
+    'outline-color': terminalService.theme.terminal.outlineColor,}"
+    class="terminal-container">
+    @if (!loading) {
+      <app-history></app-history>
+      @if (!terminalService.disableInput) {
+        <div class="user-input-line">
+          <app-ps1></app-ps1>
+          <app-input class="flex-grow"></app-input>
+        </div>
+      } @else if (terminalService.passwordInput) {
+        <div class="user-input-line">
+          <app-password-input class="flex-grow"></app-password-input>
+        </div>
+      }
+    } @else {
+      <div class="loading">
+        <app-loading></app-loading>
+      </div>
+    }
+    @if (this.viewService.isViewSet()) {
+      <ng-container *ngComponentOutlet="viewService.currentView"></ng-container>
+    }
   </div>
 </div>

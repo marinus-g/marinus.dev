@@ -1,8 +1,7 @@
 .terminal-command-input {
   font-family: 'Inconsolata', monospace;
   font-size: 18px;
-  color: #fff;
-  background-color: #000;
+  background-color: transparent;
   outline: none;
   width: 98%;
   overflow: hidden;
@@ -11,5 +10,6 @@
   box-shadow: none;
   border: none;
   line-height: normal;
+  font-optical-sizing: auto;
 }
 

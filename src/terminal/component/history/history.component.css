@@ -1,10 +1,15 @@
 .terminal-output-wrapper {
   max-height: 95%;
   overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+
 }
 
 .terminal-output {
-  font-family: monospace;
+  font-family: 'Inconsolata', monospace;
+  font-size: 18px;
   color: white;
 }
 .terminal-output__prompt {
@@ -12,7 +17,25 @@
 }
 
 .terminal-output__output {
-
+  line-height: 0;
+  user-select: text;
 }
 
 
+.history-output-style {
+  line-height: 0;
+}
+
+/* For Webkit browsers like Chrome, Safari */
+.terminal-output-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-output-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-output-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.7);
+  border-radius: 4px;
+}

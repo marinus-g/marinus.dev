@@ -1,0 +1,33 @@
+<div class="parent-container">
+  <div class="content-modal">
+    <div class="content-header">
+      <div class="content-title">Content</div>
+    </div>
+    <div class="divider"></div>
+    <div class="content-action-container">
+      <!---<div class="card content-list-card">
+        </div> --->
+      <div>
+        <div class="card content-add-card">
+          <form class="form">
+            <div class="form-group">
+              <div class="form-control">
+                <label for="content-title">Name</label>
+                <input type="text" id="content-title" placeholder="Enter Name">
+              </div>
+              <div class="form-control">
+                <label for="content-type">Content Type</label>
+                <select class="" id="content-type">
+                  <option value="" disabled selected>Select a content type</option>
+                  @for (contentType of this.contentTypeList; track contentType.toLowerCase()) {
+                    <option value="{{contentType}}">{{ contentType }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

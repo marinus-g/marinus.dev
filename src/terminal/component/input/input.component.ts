@@ -1,18 +1,20 @@
 import {AfterViewInit, Component, ElementRef, HostListener, input, ViewChild} from '@angular/core';
-import {TerminalService} from "../../service/terminal.service";
+import {TerminalService} from "../../../service/terminal.service";
+import {ViewService} from "../../../service/view.service";
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrl: './input.component.css'
 })
-export class InputComponent implements AfterViewInit{
+export class InputComponent implements AfterViewInit {
 
   @ViewChild('input') inputField: ElementRef | undefined;
 
-  protected commandInput: string = '';
+  public commandInput: string = "";
 
-  constructor(private terminalService: TerminalService) {
+
+  constructor(protected terminalService: TerminalService, private viewService: ViewService) {
   }
 
 
@@ -22,10 +24,15 @@ export class InputComponent implements AfterViewInit{
 
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event: MouseEvent): void {
+    if (event.target instanceof HTMLElement && event.target.tagName === 'A') {
+      event.preventDefault()
+      window.open(event.target.getAttribute('href') || '', '_blank');
+      // Allow the default action for <a> tags
+      return;
+    }
     if (event.target === this.inputField?.nativeElement) {
       const inputElement = this.inputField.nativeElement as HTMLInputElement;
       if (inputElement.selectionStart !== inputElement.selectionEnd) {
-        // User is selecting text, allow the default action
         return;
       }
       event.preventDefault();
@@ -34,19 +41,77 @@ export class InputComponent implements AfterViewInit{
 
   @HostListener('document:mouseup', ['$event'])
   onGlobalMouseUp(event: MouseEvent): void {
-    setTimeout(() => this.inputField?.nativeElement.focus(), 1000);
+    if (this.viewService.isViewSet()) {
+      return;
+    }
+    setTimeout(() => this.inputField?.nativeElement.focus(), 50);
   }
+
+  @HostListener('keydown.ArrowUp', ['$event'])
+  onArrowUp(event: Event) {
+    if (event.target != this.inputField?.nativeElement) {
+      return;
+    }
+    event.preventDefault();
+    if (this.terminalService.commandHistory.length === 0) {
+      return;
+    }
+    if (this.terminalService.lastCommandIndex === -1) {
+      this.terminalService.lastCommandIndex = this.terminalService.commandHistory.length;
+    }
+    this.terminalService.lastCommandIndex = Math.max(0, this.terminalService.lastCommandIndex - 1);
+
+    this.commandInput = this.terminalService.commandHistory[this.terminalService.lastCommandIndex];
+    if (this.inputField && this.inputField.nativeElement) {
+      (this.inputField.nativeElement as HTMLInputElement).value = this.commandInput;
+    }
+  }
+
+  @HostListener('keydown.ArrowDown', ['$event'])
+  onArrowDown(event: Event) {
+    if (event.target != this.inputField?.nativeElement) {
+      return;
+    }
+    event.preventDefault();
+    if (this.terminalService.commandHistory.length === 0) {
+      return;
+    }
+    if (this.terminalService.lastCommandIndex === -1) {
+      return;
+    }
+    this.terminalService.lastCommandIndex = Math.min(this.terminalService.commandHistory.length, this.terminalService.lastCommandIndex + 1);
+    if (this.terminalService.lastCommandIndex === this.terminalService.commandHistory.length) {
+      this.commandInput = '';
+    } else {
+      this.commandInput = this.terminalService.commandHistory[this.terminalService.lastCommandIndex];
+    }
+    if (this.inputField && this.inputField.nativeElement) {
+      (this.inputField.nativeElement as HTMLInputElement).value = this.commandInput;
+    }
+  }
+
   @HostListener('keydown.enter', ['$event'])
   onEnter(event: Event) {
     if (event.target != this.inputField?.nativeElement) {
       return;
-    }    event.preventDefault();
-    console.log("pressed enter " + this.commandInput)
-    if (this.commandInput.replace(/\s/g, '').length === 0) {
+    }
+    event.preventDefault();
+    if (this.commandInput == undefined || this.commandInput.replace(/\s/g, '').length === 0) {
       this.terminalService.appendEmptyHistory()
       return;
     }
     this.terminalService.handleCommand(this.commandInput)
     this.commandInput = '';
+  }
+
+  resetLastCommandIndex() {
+    this.terminalService.lastCommandIndex = -1;
+  }
+
+  @HostListener('keydown', ['$event'])
+  onTabCompleteCommand(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+    }
   }
 }

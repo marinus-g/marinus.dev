@@ -11,9 +11,38 @@
         "family": "Inconsolata",
         "size": "12"
       },
+      "informationColor": "lawngreen",
+      "warningColor": "#FCAF3E",
+      "highlightColor": "darkorange",
+      "outlineColor": "#cf0606",
+      "outerColor": "black",
+      "backgroundColor": "#363431",
+      "primaryColor": "white",
+      "secondaryColor": "cyan",
+      "clickableColor": "lightblue"
+    }
+  },
+  {
+    "name": "darker",
+    "terminal": {
+      "ps1": {
+        "nameColor": "gray",
+        "atColor": "blue",
+        "hostnameColor": "red"
+      },
+      "font": {
+        "family": "Inconsolata",
+        "size": "12"
+      },
+      "informationColor": "yellow",
+      "warningColor": "orange",
+      "highlightColor": "lawngreen",
+      "outlineColor": "red",
+      "outerColor": "black",
       "backgroundColor": "black",
       "primaryColor": "white",
-      "secondaryColor": "cyan"
+      "secondaryColor": "cyan",
+      "clickableColor": "#1076c9"
     }
   }
 ]
