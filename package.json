@@ -13,6 +13,8 @@
     "@angular/animations": "^17.1.0",
     "@angular/common": "^17.1.0",
     "@angular/compiler": "^17.1.0",
+    "@angular/cli": "^17.1.0",
+    "@angular/compiler-cli": "^17.1.0",
     "@angular/core": "^17.1.0",
     "@angular/forms": "^17.1.0",
     "@angular/platform-browser": "^17.1.0",
