@@ -1,4 +1,4 @@
-import {StringCallback} from "../../util/Callback";
+import {StringCallback} from "../util/Callback";
 
 export interface History {
   username: string | undefined

@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, input, ViewChild} from '@angular/core';
 import {TerminalService} from "../../../service/terminal.service";
+import {ViewService} from "../../../service/view.service";
 
 @Component({
   selector: 'app-input',
@@ -13,7 +14,7 @@ export class InputComponent implements AfterViewInit {
   public commandInput: string = "";
 
 
-  constructor(protected terminalService: TerminalService) {
+  constructor(protected terminalService: TerminalService, private viewService: ViewService) {
   }
 
 
@@ -40,6 +41,9 @@ export class InputComponent implements AfterViewInit {
 
   @HostListener('document:mouseup', ['$event'])
   onGlobalMouseUp(event: MouseEvent): void {
+    if (this.viewService.isViewSet()) {
+      return;
+    }
     setTimeout(() => this.inputField?.nativeElement.focus(), 50);
   }
 

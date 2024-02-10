@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../service/authentication.service";
 import {ContentService} from "../../service/content.service";
 import {Subscription} from "rxjs";
+import {ViewService} from "../../service/view.service";
 
 @Component({
   selector: 'app-terminal',
@@ -17,7 +18,7 @@ export class TerminalComponent implements OnInit {
   private subscription: Subscription | null = null;
 
   constructor(protected terminalService: TerminalService, protected route: ActivatedRoute, private router: Router,
-              private authService: AuthenticationService, private contentService: ContentService) {
+              private authService: AuthenticationService, private contentService: ContentService, protected viewService: ViewService) {
   }
 
   ngOnInit(): void {

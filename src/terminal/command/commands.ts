@@ -1,12 +1,16 @@
 import {Command} from "./command";
-import {History, HistoryType} from "../model/history";
+import {History, HistoryType} from "../../model/history";
 import {commandDescription} from "./command";
+import {needsPermission} from "./command";
 import {TerminalService} from "../../service/terminal.service";
 import {inject} from "@angular/core";
 import {DnsService} from "../../service/dns.service";
-import {Dns} from "../model/dns";
+import {Dns} from "../../model/dns";
 import {UserService} from "../../service/user.service";
 import {ContentService} from "../../service/content.service";
+import {AuthenticationService} from "../../service/authentication.service";
+import {ViewService} from "../../service/view.service";
+import {ContentComponent} from "../../content/component/content/content.component";
 
 export class Commands {
 
@@ -16,9 +20,13 @@ export class Commands {
   @Command('help', "help  - list all commands", ["help"])
   helpCommand(): History {
     const contentService = inject(ContentService);
+    const userService = inject(UserService)
     const output: string[] = [];
     commandDescription.forEach((value, key) => {
-      output.push(`${value}`)
+      if (((!needsPermission.has(key)) || (userService.registeredUser != null
+        && userService.registeredUser.roles.find(role => role.commands.includes(key) || role.commands.includes("*"))))) {
+        output.push(`${value}`)
+      }
     });
     return {
       username: contentService.getUserName(),
@@ -213,9 +221,149 @@ export class Commands {
       }
     }
   }
+
+  @Command('exit', "exit - exit the terminal", ["exit"], ["quit", "logout"])
+  exitCommand(): string {
+    const userService = inject(UserService);
+    if (userService.registeredUser != null) {
+      const authService = inject(AuthenticationService);
+      userService.registeredUser = null;
+      authService.deleteRegisteredUserToken();
+      return "Goodbye!"
+    }
+    const terminalService = inject(TerminalService);
+
+    terminalService.disableInput = true;
+    setTimeout(() => {
+      window.location.reload() // TODO: Implement back to terminal page
+      // window.open('','_parent','');
+    }, 500)
+    return "Goodbye!"
+  }
+
+  @Command('whoami', "whoami - display the current user", ["whoami"])
+  whoamiCommand(): string {
+    const contentService = inject(ContentService);
+    return contentService.getUserName();
+  }
+
+  @Command('ls', "ls - list the files in the current directory", ["ls"])
+  lsCommand(): string {
+    return "about.txt  projects  contact.txt"
+  }
+
+  @Command('cat', "cat - display the content of a file", ["cat <file>"])
+  catCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('adduser', "adduser - add a user", ["adduser <user>"], [], true)
+  adduserCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('deluser', "deluser - remove a user", ["deluser <user>"], [], true)
+  removeuserCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('users', "users - list the users", ["users"], [], true)
+  usersCommand(): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('usermod', "usermod - modify a user", ["usermod <user>"], [], true)
+  usermodCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('passwd', "passwd - change the password", ["passwd"], [], true)
+  passwdCommand(): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('addrole', "addrole - add a role", ["addrole <role>"], [], true)
+  addroleCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('delrole', "delrole - remove a role", ["delrole <role>"], [], true)
+  removeroleCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('roles', "roles - list the roles", ["roles"], [], true)
+  rolesCommand(): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+
+  @Command('addcommand', "addcommand - add a command", ["addcommand <command>"], [], true)
+  addCommandCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+
+  @Command('delcommand', "delcommand - remove a command", ["delcommand <command>"], [], true)
+  removeCommandCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('commands', "commands - list the commands", ["commands"], [], true)
+  commandsCommand(): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('editcommand', "editcommand - edit a command", ["editcommand <command>"], [], true)
+  editCommandCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('addtheme', "addtheme - add a theme", ["addtheme <theme>"], [], true)
+  addThemeCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('deltheme', "deltheme - remove a theme", ["deltheme <theme>"], [], true)
+  removeThemeCommand(args: string[]): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command('themes', "themes - list the themes", ["themes"], [], true)
+  themesCommand(): string | History {
+    const contentService = inject(ContentService);
+    return "todo"
+  }
+
+  @Command(
+    'content', "content - manage content", ["content"], [], false)
+  contentCommand(): string | History {
+    const contentService = inject(ContentService);
+    const viewService = inject(ViewService);
+    viewService.currentView = ContentComponent;
+    return "todo"
+  }
+
 }
 
-export function displayThemeHelp(terminalService: TerminalService): History {
+export function
+
+displayThemeHelp(terminalService: TerminalService): History {
   const username = inject(ContentService).getUserName();
   return {
     username: username,

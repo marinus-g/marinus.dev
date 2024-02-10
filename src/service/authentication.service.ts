@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ContentProfile, RegisteredUser} from "../terminal/model/authenticable";
+import {ContentProfile, RegisteredUser} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../util/consts";
 

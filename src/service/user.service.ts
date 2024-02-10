@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {END_POINT} from "../util/consts";
 import {firstValueFrom} from "rxjs";
-import {RegisteredUser} from "../terminal/model/authenticable";
+import {RegisteredUser} from "../model/authenticable";
 
 @Injectable({
   providedIn: 'root'

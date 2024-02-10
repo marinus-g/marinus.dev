@@ -1,4 +1,5 @@
-import {Theme} from "../theme/theme";
+import {Theme} from "./theme/theme";
+import {Role} from "./role";
 
 interface Authenticatable {
 
@@ -10,6 +11,8 @@ interface User extends Authenticatable {
   username: string
 }
 export interface RegisteredUser extends User {
+
+    roles: Role[]
 
 }
 

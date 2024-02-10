@@ -1,10 +1,10 @@
 import {Injectable, Injector, input, runInInjectionContext} from '@angular/core';
-import {Theme} from "../terminal/theme/theme";
+import {Theme} from "../model/theme/theme";
 import themes from '../themes.json';
-import {History, HistoryType} from "../terminal/model/history";
+import {History, HistoryType} from "../model/history";
 import {DomSanitizer} from '@angular/platform-browser';
 import {Commands} from "../terminal/command/commands";
-import {commandAliases, commandRegistry} from '../terminal/command/command';
+import {commandAliases, commandRegistry, needsPermission} from '../terminal/command/command';
 import {ContentService} from "./content.service";
 import {AuthenticationService} from "./authentication.service";
 import {UserService} from "./user.service";
@@ -145,17 +145,23 @@ export class TerminalService {
     const args = splittedCommand.slice(1).filter(value => value.length > 0);
     this._commandHistory.push(command);
     this.lastCommandIndex = -1;
-    if (!commandRegistry.has(commandName) && !commandAliases.has(commandName)) {
-      this.appendHistory({
-        username: this._contentService?.getUserName(),
-        prompt: " " + command,
-        output: command + ": command not found. Type 'help' for more information.",
-        historyType: HistoryType.NORMAL
-      })
-      return;
-    }
     runInInjectionContext(this.injector, () => {
+      const userService = this.injector.get(UserService);
+
+      if ((!commandRegistry.has(commandName) && !commandAliases.has(commandName)) ||
+        (needsPermission.has(commandName) && (userService.registeredUser == null
+          || !userService.registeredUser.roles
+            .find(role => role.commands.includes(commandName) || role.commands.includes("*"))))) {
+        this.appendHistory({
+          username: this._contentService?.getUserName(),
+          prompt: " " + command,
+          output: command + ": command not found. Type 'help' for more information.",
+          historyType: HistoryType.NORMAL
+        })
+        return;
+      }
       let commandFunction = commandRegistry.get(commandName);
+
       if (!commandFunction) {
         const alias = commandAliases.get(commandName);
         if (alias) {

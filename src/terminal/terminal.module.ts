@@ -14,6 +14,7 @@ import {AuthenticationService} from "../service/authentication.service";
 import {ContentService} from "../service/content.service";
 import {UserService} from "../service/user.service";
 import {PasswordInputComponent} from "./component/input/password-input/password-input.component";
+import {ViewService} from "../service/view.service";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {PasswordInputComponent} from "./component/input/password-input/password-
     PasswordInputComponent
   ],
   providers: [
+    ViewService,
     TerminalService,
     UserService,
     ContentService,

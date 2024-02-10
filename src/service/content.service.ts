@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ContentProfile} from "../terminal/model/authenticable";
+import {ContentProfile} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../util/consts";
 import {TerminalService} from "./terminal.service";
-import {Content, WelcomeScreenContent} from "../terminal/model/content";
+import {Content, WelcomeScreenContent} from "../model/content";
 import {UserService} from "./user.service";
 
 @Injectable({
