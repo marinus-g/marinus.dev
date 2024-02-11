@@ -1,6 +1,6 @@
 import {Environment} from "./ienvironment";
 
 export const environment: Environment = {
-  production: false,
+  production: true,
   apiUrl: 'https://api.marinus.dev'
 };

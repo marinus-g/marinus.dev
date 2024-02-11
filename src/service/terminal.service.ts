@@ -1,4 +1,4 @@
-import {Injectable, Injector, input, runInInjectionContext} from '@angular/core';
+import {Inject, Injectable, Injector, input, runInInjectionContext} from '@angular/core';
 import {Theme} from "../model/theme/theme";
 import themes from '../themes.json';
 import {History, HistoryType} from "../model/history";
@@ -8,6 +8,8 @@ import {commandAliases, commandRegistry, needsPermission} from '../terminal/comm
 import {ContentService} from "./content.service";
 import {AuthenticationService} from "./authentication.service";
 import {UserService} from "./user.service";
+import {ENV} from "../environments/environment.provider";
+import {Environment} from "../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,8 @@ export class TerminalService {
   private _userToChangeTo: string = "";
 
 
-  constructor(private sanitizer: DomSanitizer, private injector: Injector, private authenticationService: AuthenticationService, private userService: UserService) {
+  constructor(private sanitizer: DomSanitizer, private injector: Injector,
+              private authenticationService: AuthenticationService, private userService: UserService, @Inject(ENV) private env: Environment) {
     new Commands();
   }
 
@@ -259,9 +262,8 @@ export class TerminalService {
   }
 
   async ping(url: string): Promise<number> {
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      url = "http://" + url;
-    }
+    url = url.replace("http://", "").replace("https://", "");
+    url = (this.env.production ? "http://" : "http://") + url;
     const start = new Date().getTime();
     const response = await fetch(url, {mode: 'no-cors'});
     if (response.status == 503) {
