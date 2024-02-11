@@ -1,8 +1,10 @@
-import {Injectable} from "@angular/core";
+import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {END_POINT} from "../util/consts";
 import {Dns} from "../model/dns";
 import {firstValueFrom} from "rxjs";
+import {ENV} from "../environments/environment.provider";
+import {Environment} from "../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class DnsService {
 
   private readonly dnsCache: Map<string, Dns> = new Map<string, Dns>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, @Inject(ENV) private env: Environment) {
 
   }
 
@@ -27,7 +29,7 @@ export class DnsService {
   }
 
   private async resolveFromBackend(domain: string): Promise<Dns | undefined> {
-    const $response = this.http.get<Dns>(END_POINT.DNS_RESOLVE + domain, {observe: 'response'})
+    const $response = this.http.get<Dns>(this.env.apiUrl + END_POINT.DNS_RESOLVE + domain, {observe: 'response'})
     const response = firstValueFrom($response)
     try {
       const value = await response;

@@ -1,22 +1,23 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ContentProfile, RegisteredUser} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
-import {END_POINT} from "../util/consts";
+import {BACKEND, END_POINT} from "../util/consts";
+import {Environment} from "../environments/ienvironment";
+import {ENV} from "../environments/environment.provider";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(private http: HttpClient) {
-
+  constructor(private http: HttpClient, @Inject(ENV) private env: Environment) {
   }
 
   public async authenticate(data: AuthenticationData): Promise<ContentProfile | RegisteredUser | undefined> {
     const body = data.password == null ?
       {login: data.login, type: 'content'} : {login: data.login, password: data.password, type:'user'}
-    const response$ = this.http.post<ContentProfile | RegisteredUser>(END_POINT.AUTHENTICATE + (data.password == null ? '?content=x' : ''),
+    const response$ = this.http.post<ContentProfile | RegisteredUser>(this.env.apiUrl + END_POINT.AUTHENTICATE + (data.password == null ? '?content=x' : ''),
       body, {observe: 'response', withCredentials: true});
     try {
       const response = await firstValueFrom(response$);

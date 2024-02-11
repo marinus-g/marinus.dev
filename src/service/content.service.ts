@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ContentProfile} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
@@ -6,6 +6,8 @@ import {END_POINT} from "../util/consts";
 import {TerminalService} from "./terminal.service";
 import {Content, WelcomeScreenContent} from "../model/content";
 import {UserService} from "./user.service";
+import {ENV} from "../environments/environment.provider";
+import {Environment} from "../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +17,12 @@ export class ContentService {
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
 
-  constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService) {
+  constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService, @Inject(ENV) private env: Environment) {
   }
 
   public async getContentProfile(): Promise<ContentProfile> {
 
-    const response$ = this.http.get<ContentProfile>(END_POINT.CONTENT_PROFILE, {
+    const response$ = this.http.get<ContentProfile>(this.env.apiUrl + END_POINT.CONTENT_PROFILE, {
       observe: 'response',
       withCredentials: true
     });
@@ -31,13 +33,13 @@ export class ContentService {
 
 
   public async getContent(): Promise<JSON> {
-    const response$ = this.http.get<JSON>(END_POINT.CONTENT_FETCH, {observe: 'response', withCredentials: true});
+    const response$ = this.http.get<JSON>(this.env.apiUrl + END_POINT.CONTENT_FETCH, {observe: 'response', withCredentials: true});
     const response = await firstValueFrom(response$);
     return response.body as JSON;
   }
 
   public async getDefaultContent(): Promise<JSON> {
-    const response$ = this.http.get<JSON>(END_POINT.DEFAULT_CONTENT, {observe: 'response'});
+    const response$ = this.http.get<JSON>(this.env.apiUrl + END_POINT.DEFAULT_CONTENT, {observe: 'response'});
     const response = await firstValueFrom(response$);
     return response.body as JSON;
   }

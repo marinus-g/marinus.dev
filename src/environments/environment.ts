@@ -1,4 +1,6 @@
-export const environment = {
-  production: true,
-  apiUrl: 'https://rest.marinus.dev'
-};
+import {Environment} from "./ienvironment";
+
+export const environment: Environment = {
+  production: false,
+  apiUrl: 'url'
+}

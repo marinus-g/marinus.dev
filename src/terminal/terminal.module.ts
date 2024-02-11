@@ -15,6 +15,7 @@ import {ContentService} from "../service/content.service";
 import {UserService} from "../service/user.service";
 import {PasswordInputComponent} from "./component/input/password-input/password-input.component";
 import {ViewService} from "../service/view.service";
+import {ENV, getEnv} from "../environments/environment.provider";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {ViewService} from "../service/view.service";
     ContentService,
     AuthenticationService,
     DnsService,
+    {provide: ENV, useFactory: getEnv}
   ],
   exports: [
     TerminalComponent
