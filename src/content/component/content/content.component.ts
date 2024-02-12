@@ -35,7 +35,6 @@ export class ContentComponent implements DynamicComponent {
         case ContentType.COMMAND:
           this.contentAddAddition = CommandContentComponent;
           break;
-
       }
     }
   }
