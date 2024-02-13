@@ -1,8 +1,22 @@
 <div class="form-control">
   <label for="welcome-message-input">Message</label>
-  <input id="welcome-message-input" placeholder="Please enter a message!">
+  <div class="message-block">
+    @for (str of messages; track messages.indexOf(str);  let idx = $index) {
+      <div class="input-block">
+        <input class="welcome-message-input" id="welcome-message-input" placeholder="Please enter a message!"
+               [(ngModel)]="tempMessages[idx]" (change)="onInputChange(idx)">
+        <button class="remove-message-button" (click)="onRemoveMessage(idx)">-</button>
+      </div>
+    }
+  </div>
+  <div class="button-block">
+    <button class="add-message-button" (click)="onAddMessage()">+</button>
+    @if (this.isPreview()) {
+      <ng-container *ngComponentOutlet="preview"></ng-container>
+    }
+    <button class="preview-button" (mouseenter)="onPreviewStart()" (mouseleave)="onPreviewEnd()">Vorschau</button>
+  </div>
+  <div class="form-control">
+    <button class="submit-button">Submit</button>
+  </div>
 </div>
-<div class="form-control">
-  <button class="submit-button">Submit</button>
-</div>
-

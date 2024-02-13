@@ -1,10 +1,15 @@
-export interface Content {
+interface ContentId {
   id: number;
+}
+export interface Content {
   name: string;
   content_type: string;
 }
 
-export interface WelcomeScreenContent extends Content {
+export interface WelcomeScreenContent extends Content, ContentId {
   welcomeMessage: string[];
 }
 
+export interface WelcomeScreenContentCreate extends Content {
+  welcomeMessage: string[];
+}

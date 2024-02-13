@@ -8,4 +8,5 @@ export enum END_POINT {
   DEFAULT_CONTENT = '/api/v1/content/default',
   USER_EXISTS = '/api/v1/public/user/{username}/exists',
   CURRENT_USER = '/api/v1/user',
+  CONTENT_CREATE = '/api/v1/content/',
 }

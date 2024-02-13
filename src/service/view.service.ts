@@ -17,6 +17,7 @@ export class ViewService {
   }
 
   set currentView(value: DynamicComponent | undefined) {
+    console.log("set currentView", value)
     this._currentView = value;
   }
 

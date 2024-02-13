@@ -14,5 +14,4 @@ export class CommandContentComponent implements DynamicComponent, ContentAddSect
   canAdd(): boolean {
     return true;
   }
-
 }

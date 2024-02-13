@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TerminalService} from "../../service/terminal.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../service/authentication.service";
@@ -16,6 +16,7 @@ export class TerminalComponent implements OnInit {
 
   private _loading: boolean = true;
   private subscription: Subscription | null = null;
+
 
   constructor(protected terminalService: TerminalService, protected route: ActivatedRoute, private router: Router,
               private authService: AuthenticationService, private contentService: ContentService, protected viewService: ViewService) {

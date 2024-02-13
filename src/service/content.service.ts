@@ -38,6 +38,12 @@ export class ContentService {
     return response.body as JSON;
   }
 
+  public async createContent(content: JSON): Promise<Content> {
+    const response$ = this.http.post<Content>(this.env.apiUrl + END_POINT.CONTENT_CREATE, content, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    return response.body as Content;
+  }
+
   public async getDefaultContent(): Promise<JSON> {
     const response$ = this.http.get<JSON>(this.env.apiUrl + END_POINT.DEFAULT_CONTENT, {observe: 'response'});
     const response = await firstValueFrom(response$);

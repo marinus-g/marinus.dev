@@ -3,7 +3,7 @@ import {History, HistoryType} from "../../model/history";
 import {commandDescription} from "./command";
 import {needsPermission} from "./command";
 import {TerminalService} from "../../service/terminal.service";
-import {inject} from "@angular/core";
+import {ComponentFactoryResolver, inject, ViewContainerRef} from "@angular/core";
 import {DnsService} from "../../service/dns.service";
 import {Dns} from "../../model/dns";
 import {UserService} from "../../service/user.service";
@@ -355,7 +355,7 @@ export class Commands {
   contentCommand(): string | History {
     const contentService = inject(ContentService);
     const viewService = inject(ViewService);
-    viewService.currentView = ContentComponent;
+    viewService.currentView =  ContentComponent;
     return "todo"
   }
 

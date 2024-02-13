@@ -22,6 +22,10 @@ export class ContentComponent implements DynamicComponent {
     return this._contentAddAddition;
   }
 
+  constructor() {
+  }
+
+
   public set contentAddAddition(value: DynamicComponent | undefined) {
     this._contentAddAddition = value;
   }
@@ -37,6 +41,10 @@ export class ContentComponent implements DynamicComponent {
           break;
       }
     }
+  }
+
+  onFormSubmit(event: Event) {
+    event.preventDefault()
   }
 }
 
