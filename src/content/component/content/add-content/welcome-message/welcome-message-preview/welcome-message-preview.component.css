@@ -21,3 +21,13 @@
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.terminal-output__output {
+  line-height: 0;
+  user-select: text;
+}
+
+
+.history-output-style {
+  line-height: 0;
+}
