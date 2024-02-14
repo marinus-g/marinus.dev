@@ -1,5 +1,5 @@
 <div class="parent-container">
-  <div class="content-modal">
+  <div #contentWindow class="content-modal">
     <div class="content-header">
       <div class="content-title">Content</div>
     </div>
@@ -29,8 +29,8 @@
               </div>
             </div>
             <div class="form-group-divider"></div>
-            <div class="form-group">
-                <ng-container *ngComponentOutlet="contentAddAddition"></ng-container>
+            <div #childComponent class="form-group">
+                <ng-container #componentChild *ngComponentOutlet="contentAddAddition"></ng-container>
             </div>
           </form>
         </div>

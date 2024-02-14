@@ -3,6 +3,7 @@ import {TerminalService} from "../../../../../../service/terminal.service";
 import {NgForOf, NgStyle} from "@angular/common";
 import {WelcomeMessageContentComponent} from "../welcome-message.content.component";
 import {DomSanitizer} from "@angular/platform-browser";
+import {ViewService} from "../../../../../../service/view.service";
 
 @Component({
   selector: 'app-welcome-message-preview',
@@ -17,7 +18,8 @@ import {DomSanitizer} from "@angular/platform-browser";
 export class WelcomeMessagePreviewComponent {
 
   constructor(protected terminalService: TerminalService,
-              protected welcomeMessageContent: WelcomeMessageContentComponent, protected sanitizer: DomSanitizer) {
+              protected welcomeMessageContent: WelcomeMessageContentComponent, protected sanitizer: DomSanitizer,
+              protected viewService: ViewService) {
 
   }
 

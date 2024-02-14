@@ -1,8 +1,9 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {DynamicComponent} from "../../../component/dynamic-component";
 import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
 import {CommandContentComponent} from "./add-content/command.content/command.content.component";
+import {ViewService} from '../../../service/view.service';
 
 @Component({
   selector: 'app-content',
@@ -18,11 +19,14 @@ export class ContentComponent implements DynamicComponent {
   protected contentTypeList = [ContentType.WELCOME, ContentType.COMMAND];
   protected _contentAddAddition: DynamicComponent | undefined = undefined;
   @ViewChild('contentTypeSelect') contentTypeSelect: ElementRef | undefined = undefined;
+  @ViewChild('contentWindow') contentWindow: ElementRef | undefined = undefined;
+  @ViewChild('childComponent') childComponent: ElementRef | undefined = undefined;
+
   public get contentAddAddition(): any {
     return this._contentAddAddition;
   }
 
-  constructor() {
+  constructor(private viewService: ViewService) {
   }
 
 
@@ -45,6 +49,38 @@ export class ContentComponent implements DynamicComponent {
 
   onFormSubmit(event: Event) {
     event.preventDefault()
+  }
+
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (event.defaultPrevented) {
+      return
+    }
+    const targetElement = event.target as HTMLElement;
+    const clickedInside = this.contentWindow?.nativeElement.contains(targetElement);
+    const contentClickedInside = this.isClickedInside(this.childComponent?.nativeElement, targetElement);
+    if (!clickedInside && !contentClickedInside) {
+      this.viewService.clearView()
+    }
+  }
+
+
+  isClickedInside(element: HTMLElement | undefined, targetElement: HTMLElement): boolean {
+
+    if (!element) {
+      return false;
+    }
+
+    if (element.contains(targetElement)) {
+      return true;
+    }
+    for (let i = 0; i < element.children.length; i++) {
+      if (this.isClickedInside(element.children[i] as HTMLElement, targetElement)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

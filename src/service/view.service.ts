@@ -7,17 +7,32 @@ import {DynamicComponent} from "../component/dynamic-component";
 export class ViewService {
 
   private _currentView: DynamicComponent | undefined = undefined;
+  private _previewPositionProperties: PreviewPositionProperties = {
+    top: '25%',
+    right: '10%',
+    bottom: '25%',
+    left: '25%',
+    width: undefined,
+    height: undefined
+  };
 
   constructor() {
   }
 
+
+  get previewPositionProperties(): PreviewPositionProperties {
+    return this._previewPositionProperties;
+  }
+
+  set previewPositionProperties(value: PreviewPositionProperties) {
+    this._previewPositionProperties = value;
+  }
 
   get currentView(): any | undefined {
     return this._currentView;
   }
 
   set currentView(value: DynamicComponent | undefined) {
-    console.log("set currentView", value)
     this._currentView = value;
   }
 
@@ -28,4 +43,14 @@ export class ViewService {
   public isViewSet(): boolean {
     return this._currentView !== undefined;
   }
+}
+
+export interface PreviewPositionProperties {
+  top?: string,
+  left?: string,
+  right?: string,
+  bottom?: string,
+  width?: string | undefined,
+  height?: string | undefined,
+  opacity?: string | undefined
 }

@@ -28,7 +28,6 @@ export class InputComponent implements AfterViewInit {
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event: MouseEvent): void {
     if (this.viewService.isViewSet()) {
-      console.log("return")
       return;
     }
     if (event.target instanceof HTMLElement && event.target.tagName === 'A') {
