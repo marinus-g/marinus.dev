@@ -120,3 +120,11 @@ label {
   margin: 5px;
   padding: 1px;
 }
+
+.error-message {
+  color: red;
+  font-size: 15px;
+  font-family: Arimo, monospace;
+  font-style: normal;
+  align-self: center;
+}

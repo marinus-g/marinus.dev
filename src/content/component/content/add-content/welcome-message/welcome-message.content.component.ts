@@ -5,6 +5,9 @@ import {FormsModule} from "@angular/forms";
 import {WelcomeMessagePreviewComponent} from "./welcome-message-preview/welcome-message-preview.component";
 import {NgComponentOutlet} from "@angular/common";
 import {ViewService} from "../../../../../service/view.service";
+import {ContentService} from "../../../../../service/content.service";
+import {WelcomeScreenContentCreate} from "../../../../../model/content";
+import {ContentComponent} from "../../content.component";
 
 @Component({
   selector: 'app-welcome-message',
@@ -21,12 +24,37 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
   protected messages: string[] = [];
   tempMessages: string[] = [];
   protected preview: any | undefined = undefined;
+  protected showNameMissing: boolean = false;
   private previewTimeout: any | undefined = undefined;
   private previewHidingTimeout: any | undefined = undefined;
+  private timeout: any | undefined = undefined;
 
   @ViewChild('previewButton') previewButton: ElementRef | undefined = undefined;
 
-  constructor(private viewService: ViewService, private cdr: ChangeDetectorRef) {
+  constructor(private viewService: ViewService, private cdr: ChangeDetectorRef, private contentService: ContentService,
+              private contentComponent: ContentComponent) {
+  }
+
+  submit() {
+    console.log("submit", this.contentService.contentAddName)
+    if (this.contentService.contentAddName.trim().length == 0) {
+      if (this.timeout !== undefined) {
+        clearTimeout(this.timeout);
+      }
+      this.showNameMissing = true
+      this.timeout = setTimeout(() => {
+        this.showNameMissing = false
+      }, 3000)
+    }
+    const messageContent: WelcomeScreenContentCreate = {
+      name: 'Welcome Message',
+      content_type: 'welcome_message',
+      welcomeMessage: this.messages
+    }
+    this.contentService.createContent(messageContent).then((content) => {
+      console.log("content created", content)
+    })
+    return;
   }
 
   canAdd(): boolean {
@@ -109,6 +137,4 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
     event.preventDefault()
 
   }
-
-  protected readonly console = console;
 }

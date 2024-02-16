@@ -4,7 +4,7 @@ import {ContentProfile} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../util/consts";
 import {TerminalService} from "./terminal.service";
-import {Content, WelcomeScreenContent} from "../model/content";
+import {Content, ContentCreateDto, WelcomeScreenContent} from "../model/content";
 import {UserService} from "./user.service";
 import {ENV} from "../environments/environment.provider";
 import {Environment} from "../environments/ienvironment";
@@ -16,6 +16,7 @@ export class ContentService {
 
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
+  private _contentAddName: string = '';
 
   constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService, @Inject(ENV) private env: Environment) {
   }
@@ -38,7 +39,7 @@ export class ContentService {
     return response.body as JSON;
   }
 
-  public async createContent(content: JSON): Promise<Content> {
+  public async createContent(content: ContentCreateDto): Promise<Content> {
     const response$ = this.http.post<Content>(this.env.apiUrl + END_POINT.CONTENT_CREATE, content, {observe: 'response', withCredentials: true});
     const response = await firstValueFrom(response$);
     return response.body as Content;
@@ -85,5 +86,14 @@ export class ContentService {
 
   get contentArray(): Content[] {
     return this._contentArray;
+  }
+
+
+  get contentAddName(): string {
+    return this._contentAddName;
+  }
+
+  set contentAddName(value: string) {
+    this._contentAddName = value;
   }
 }

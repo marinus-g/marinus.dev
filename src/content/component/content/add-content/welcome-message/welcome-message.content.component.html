@@ -19,6 +19,9 @@
     </button>
   </div>
   <div class="form-control">
-    <button class="submit-button">Submit</button>
+    <button class="submit-button" (click)="submit()">Submit</button>
   </div>
+  @if (this.showNameMissing) {
+    <div class="error-message">Please enter a name!</div>
+  }
 </div>

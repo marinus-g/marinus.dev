@@ -1,3 +1,4 @@
 export interface ContentAddSection {
-  canAdd(): boolean;
+  canAdd(): boolean
+
 }

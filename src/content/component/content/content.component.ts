@@ -4,12 +4,15 @@ import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
 import {CommandContentComponent} from "./add-content/command.content/command.content.component";
 import {ViewService} from '../../../service/view.service';
+import {FormsModule} from "@angular/forms";
+import {ContentService} from "../../../service/content.service";
 
 @Component({
   selector: 'app-content',
   standalone: true,
   imports: [
-    NgComponentOutlet
+    NgComponentOutlet,
+    FormsModule
   ],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
@@ -26,7 +29,7 @@ export class ContentComponent implements DynamicComponent {
     return this._contentAddAddition;
   }
 
-  constructor(private viewService: ViewService) {
+  constructor(private viewService: ViewService, protected contentService: ContentService) {
   }
 
 
@@ -81,6 +84,10 @@ export class ContentComponent implements DynamicComponent {
       }
     }
     return false;
+  }
+
+  contentAddNameChange(event: Event) {
+    event.target.value
   }
 }
 
