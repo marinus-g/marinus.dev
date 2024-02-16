@@ -4,7 +4,7 @@ import {ContentProfile} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../util/consts";
 import {TerminalService} from "./terminal.service";
-import {Content, ContentCreateDto, WelcomeScreenContent} from "../model/content";
+import {Content, ContentCreateDto, ContentModel, WelcomeScreenContent} from "../model/content";
 import {UserService} from "./user.service";
 import {ENV} from "../environments/environment.provider";
 import {Environment} from "../environments/ienvironment";
@@ -17,6 +17,7 @@ export class ContentService {
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
   private _contentAddName: string = '';
+  private _contentList: ContentModel[] =[];
 
   constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService, @Inject(ENV) private env: Environment) {
   }
@@ -49,6 +50,12 @@ export class ContentService {
     const response$ = this.http.get<JSON>(this.env.apiUrl + END_POINT.DEFAULT_CONTENT, {observe: 'response'});
     const response = await firstValueFrom(response$);
     return response.body as JSON;
+  }
+
+  public async fetchAll(): Promise<void> {
+    const response$ = this.http.get<ContentModel[]>(this.env.apiUrl + END_POINT.CONTENT_FETCH_ALL, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    this._contentList = response.body as ContentModel[];
   }
 
 
@@ -95,5 +102,10 @@ export class ContentService {
 
   set contentAddName(value: string) {
     this._contentAddName = value;
+  }
+
+
+  get contentList(): ContentModel[] {
+    return this._contentList;
   }
 }

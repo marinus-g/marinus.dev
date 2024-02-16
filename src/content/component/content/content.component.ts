@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {DynamicComponent} from "../../../component/dynamic-component";
 import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
@@ -21,6 +21,7 @@ export class ContentComponent implements DynamicComponent {
 
   protected contentTypeList = [ContentType.WELCOME, ContentType.COMMAND];
   protected _contentAddAddition: DynamicComponent | undefined = undefined;
+  @ViewChild('contentNameInput') contentNameInput: ElementRef | undefined = undefined;
   @ViewChild('contentTypeSelect') contentTypeSelect: ElementRef | undefined = undefined;
   @ViewChild('contentWindow') contentWindow: ElementRef | undefined = undefined;
   @ViewChild('childComponent') childComponent: ElementRef | undefined = undefined;
@@ -30,6 +31,10 @@ export class ContentComponent implements DynamicComponent {
   }
 
   constructor(private viewService: ViewService, protected contentService: ContentService) {
+    this.contentService.fetchAll()
+      .catch(reason => {
+      console.error(reason)
+    });
   }
 
 
@@ -87,7 +92,7 @@ export class ContentComponent implements DynamicComponent {
   }
 
   contentAddNameChange(event: Event) {
-    event.target.value
+    this.contentService.contentAddName = (event.target as HTMLInputElement).value;
   }
 }
 

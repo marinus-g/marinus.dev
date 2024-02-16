@@ -14,7 +14,7 @@
             <div class="form-group">
               <div class="form-control">
                 <label for="content-title">Name</label>
-                <input type="text" id="content-title" placeholder="Enter Name" [(ngModel)]="" )="contentAddNameChange($event)" )>
+                <input type="text" id="content-title" placeholder="Enter Name" (change)="contentAddNameChange($event)" #contentNameInput>
               </div>
               <div class="form-control">
                 <label for="content-type">Content Type</label>
@@ -37,7 +37,20 @@
       </div>
       <div>
         <div class="card content-list-card">
-
+          <div class="content-list-header">
+            <h1 class="content-list-title">Content List</h1>
+          </div>
+          <div class="content-list">
+            @for (content of this.contentService.contentList; track content.id) {
+              <div class="content-list-item">
+                <div class="content-list-item-name">{{ content.name }}</div>
+                <div class="content-list-item-type">{{ content.content_type }}</div>
+                <div class="content-list-item-action">
+                  <div>TODO</div>
+                </div>
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>

@@ -35,8 +35,8 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
               private contentComponent: ContentComponent) {
   }
 
+
   submit() {
-    console.log("submit", this.contentService.contentAddName)
     if (this.contentService.contentAddName.trim().length == 0) {
       if (this.timeout !== undefined) {
         clearTimeout(this.timeout);
@@ -47,14 +47,21 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
       }, 3000)
     }
     const messageContent: WelcomeScreenContentCreate = {
-      name: 'Welcome Message',
-      content_type: 'welcome_message',
+      name: this.contentService.contentAddName.trim(),
+      content_type: 'welcome_screen',
       welcomeMessage: this.messages
     }
-    this.contentService.createContent(messageContent).then((content) => {
-      console.log("content created", content)
-    })
-    return;
+    this.contentService.createContent(messageContent)
+      .then((content) => {
+        this.contentComponent.contentAddAddition = undefined;
+        this.contentService.contentAddName = '';
+        if (this.contentComponent.contentNameInput?.nativeElement) {
+          this.contentComponent.contentNameInput.nativeElement.value = '';
+        }
+        if (this.contentComponent.contentTypeSelect?.nativeElement) {
+          this.contentComponent.contentTypeSelect.nativeElement.value = '';
+        }
+      });
   }
 
   canAdd(): boolean {
@@ -63,15 +70,12 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
 
 
   onRemoveMessage(idx: number, event: MouseEvent) {
-    console.log("remove message")
-    console.log("event", event)
     event.preventDefault()
     this.messages.splice(idx, 1);
     this.tempMessages.splice(idx, 1);
   }
 
   onAddMessage() {
-    console.log("add message")
     this.messages.push('');
     this.tempMessages.push('');
   }
@@ -81,7 +85,6 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
   }
 
   onPreviewStart() {
-    console.log("preview start")
     this.viewService.previewPositionProperties = {
       top: '40%',
       left: '18%',
@@ -89,8 +92,6 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
       height: '30%',
       opacity: '0'
     }
-
-    console.log(this.viewService.previewPositionProperties)
     if (this.previewHidingTimeout !== undefined) {
       clearTimeout(this.previewHidingTimeout);
     } else {
@@ -112,7 +113,6 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
 
   onPreviewEnd() {
     if (this.previewTimeout !== undefined) {
-      console.log("clear timeout")
       clearTimeout(this.previewTimeout);
     }
     this.viewService.previewPositionProperties = {
@@ -135,6 +135,5 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
 
   onSubmit(event: SubmitEvent) {
     event.preventDefault()
-
   }
 }
