@@ -3,7 +3,7 @@ import {DynamicComponent} from "../../../../../shared/component/dynamic-componen
 import {ContentAddSection} from "../add-content.interface";
 
 @Component({
-  selector: 'app-command.content',
+  selector: 'app-command-content',
   standalone: true,
   imports: [],
   templateUrl: './command.content.component.html',
