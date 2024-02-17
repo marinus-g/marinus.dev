@@ -1,0 +1,73 @@
+<div class="parent-container">
+  <div class="content-header">
+    <div class="content-title">Content</div>
+  </div>
+  <div class="divider"></div>
+  <div #contentWindow class="content-modal">
+    @if (this.isPreview()) {
+      <ng-container #componentChild *ngComponentOutlet="preview"></ng-container>
+    }
+    <div class="content-action-container">
+      <!---<div class="card content-list-card">
+        </div> --->
+
+      <div class="card content-add-card">
+        <form class="form" (submit)="onFormSubmit($event)">
+          <h1 class="content-list-title">Add Content</h1>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="content-title">Name</label>
+              <input type="text" id="content-title" placeholder="Enter Name" (change)="contentAddNameChange($event)"
+                     #contentNameInput>
+            </div>
+            <div class="form-control">
+              <label for="content-type">Content Type</label>
+              <select class="" id="content-type"
+                      #contentTypeSelect
+                      (change)="onContentTypeSelect()">
+                <option value="" disabled selected>Select a content type</option>
+                @for (contentType of this.contentTypeList; track contentType.toLowerCase()) {
+                  <option value="{{contentType}}">{{ contentType }}</option>
+                }
+              </select>
+              @if (this.selectedContentType() === ContentSelectionType.WELCOME) {
+                <app-welcome-message [name]="this.contentAddName"></app-welcome-message>
+              }
+            </div>
+          </div>
+          <div class="form-group-divider"></div>
+        </form>
+      </div>
+      <div class="card content-list-card">
+        <div class="content-list-header">
+          <h1 class="content-list-title">Content List</h1>
+        </div>
+        <div class="content-list">
+          @for (content of this.contentService.contentList; track content.id) {
+            <div class="content-list-item" (mouseenter)="onPreviewStart(content)" (mouseleave)="onPreviewEnd()"
+                 (click)="!contentEdit.includes(content.id) ? contentEdit.push(content.id) : contentEdit.splice(contentEdit.lastIndexOf(content.id), 1)">
+              <div class="content-list-item-name">{{ content.name }}</div>
+              <div class="content-list-item-type">{{ content.content_type }}</div>
+            </div>
+            @if (this.contentEdit.includes(content.id)) {
+              <div class="content-edit">
+                <div>{{ content.content_type }}</div>
+                @if (content.content_type === ContentType.WELCOME_SCREEN) {
+                  <app-welcome-message [id]="content.id"
+                                       [edit]="true"
+                                       [messages]="this.toWelcomeMessageContent(content).welcomeMessage"
+                                       [name]="content.name"></app-welcome-message>
+                } @else if (content.content_type === ContentType.COMMAND) {
+                  <div>TODO</div>
+                } @else {
+                  <div>Content Type not found</div>
+                }
+              </div>
+            }
+            <!--  rename input - welcome-message-content -->
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

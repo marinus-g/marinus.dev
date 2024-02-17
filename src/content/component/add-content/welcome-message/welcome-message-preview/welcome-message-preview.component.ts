@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {TerminalService} from "../../../../../../terminal/service/terminal.service";
+import {TerminalService} from "../../../../../terminal/service/terminal.service";
 import {NgForOf, NgStyle} from "@angular/common";
 import {WelcomeMessageContentComponent} from "../welcome-message.content.component";
 import {DomSanitizer} from "@angular/platform-browser";
-import {ViewService} from "../../../../../../shared/service/view.service";
+import {ViewService} from "../../../../../shared/service/view.service";
 
 @Component({
   selector: 'app-welcome-message-preview',

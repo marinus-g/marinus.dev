@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
-import {DynamicComponent} from "../../../../../shared/component/dynamic-component";
+import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {DynamicComponent} from "../../../../shared/component/dynamic-component";
 import {ContentAddSection} from "../add-content.interface";
 import {FormsModule} from "@angular/forms";
 import {WelcomeMessagePreviewComponent} from "./welcome-message-preview/welcome-message-preview.component";
 import {NgComponentOutlet} from "@angular/common";
-import {ViewService} from "../../../../../shared/service/view.service";
-import {ContentService} from "../../../../../shared/service/content.service";
-import {WelcomeScreenContentCreate} from "../../../../../shared/model/content";
+import {ViewService} from "../../../../shared/service/view.service";
+import {ContentService} from "../../../../shared/service/content.service";
+import {WelcomeScreenContent, WelcomeScreenContentCreate} from "../../../../shared/model/content";
 import {ContentComponent} from "../../content.component";
 
 @Component({
@@ -19,9 +19,12 @@ import {ContentComponent} from "../../content.component";
   templateUrl: './welcome-message.content.component.html',
   styleUrl: './welcome-message.content.component.css'
 })
-export class WelcomeMessageContentComponent implements DynamicComponent, ContentAddSection {
+export class WelcomeMessageContentComponent implements DynamicComponent, ContentAddSection, OnInit {
 
-  protected messages: string[] = [];
+  @Input('edit') public edit = false
+  @Input('messages') public messages: string[] = [];
+  @Input('id') public id = -1;
+  @Input('name') public name: string = ''
   tempMessages: string[] = [];
   protected preview: any | undefined = undefined;
   protected showNameMissing: boolean = false;
@@ -35,9 +38,12 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
               private contentComponent: ContentComponent) {
   }
 
+  ngOnInit() {
+    this.messages.forEach(value => this.tempMessages.push(value))
+  }
 
   submit() {
-    if (this.contentService.contentAddName.trim().length == 0) { // If there´s no name entered we return
+    if (this.name.trim().length == 0) { // If there´s no name entered we return
       if (this.timeout !== undefined) {
         clearTimeout(this.timeout);
       }
@@ -47,22 +53,35 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
       }, 3000)
       return
     }
-    const messageContent: WelcomeScreenContentCreate = {
-      name: this.contentService.contentAddName.trim(),
-      content_type: 'welcome_screen',
-      welcomeMessage: this.messages
+
+    if (this.edit) {
+      const messageContent: WelcomeScreenContent = {
+        content_type: "welcome_screen",
+        id: this.id,
+        name: this.contentComponent.getContentEditName(this.id),
+        welcomeMessage: this.messages
+      }
+      this.contentService.editContent(messageContent).then(value => {
+        this.contentComponent.removeFromEdit(this.id);
+      })
+    } else {
+      const messageContent: WelcomeScreenContentCreate = {
+        name: this.name.trim(),
+        content_type: 'welcome_screen',
+        welcomeMessage: this.messages
+      }
+      this.contentService.createContent(messageContent)
+        .then((content) => {
+          this.contentComponent.contentAddAddition = undefined;
+          this.name = '';
+          if (this.contentComponent.contentNameInput?.nativeElement) {
+            this.contentComponent.contentNameInput.nativeElement.value = '';
+          }
+          if (this.contentComponent.contentTypeSelect?.nativeElement) {
+            this.contentComponent.contentTypeSelect.nativeElement.value = '';
+          }
+        });
     }
-    this.contentService.createContent(messageContent)
-      .then((content) => {
-        this.contentComponent.contentAddAddition = undefined;
-        this.contentService.contentAddName = '';
-        if (this.contentComponent.contentNameInput?.nativeElement) {
-          this.contentComponent.contentNameInput.nativeElement.value = '';
-        }
-        if (this.contentComponent.contentTypeSelect?.nativeElement) {
-          this.contentComponent.contentTypeSelect.nativeElement.value = '';
-        }
-      });
   }
 
   canAdd(): boolean {

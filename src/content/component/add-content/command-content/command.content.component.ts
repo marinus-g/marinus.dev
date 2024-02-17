@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {DynamicComponent} from "../../../../../shared/component/dynamic-component";
+import {DynamicComponent} from "../../../../shared/component/dynamic-component";
 import {ContentAddSection} from "../add-content.interface";
 
 @Component({

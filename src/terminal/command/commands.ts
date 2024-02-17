@@ -10,7 +10,7 @@ import {UserService} from "../../shared/service/user.service";
 import {ContentService} from "../../shared/service/content.service";
 import {AuthenticationService} from "../../shared/service/authentication.service";
 import {ViewService} from "../../shared/service/view.service";
-import {ContentComponent} from "../../content/component/content/content.component";
+import {ContentComponent} from "../../content/component/content.component";
 
 export class Commands {
 

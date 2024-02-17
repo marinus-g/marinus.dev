@@ -16,7 +16,6 @@ export class ContentService {
 
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
-  private _contentAddName: string = '';
   private _contentList: ContentModel[] =[];
 
   constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService, @Inject(ENV) private env: Environment) {
@@ -44,6 +43,12 @@ export class ContentService {
     const response$ = this.http.post<Content>(this.env.apiUrl + END_POINT.CONTENT_CREATE, content, {observe: 'response', withCredentials: true});
     const response = await firstValueFrom(response$);
     return response.body as Content;
+  }
+
+  public async editContent(content: ContentModel): Promise<Content> {
+    const response$ = this.http.put<ContentModel>(this.env.apiUrl + END_POINT.CONTENT_CREATE + content.id, content, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    return response.body as ContentModel;
   }
 
   public async getDefaultContent(): Promise<JSON> {
@@ -94,16 +99,6 @@ export class ContentService {
   get contentArray(): Content[] {
     return this._contentArray;
   }
-
-
-  get contentAddName(): string {
-    return this._contentAddName;
-  }
-
-  set contentAddName(value: string) {
-    this._contentAddName = value;
-  }
-
 
   get contentList(): ContentModel[] {
     return this._contentList;
