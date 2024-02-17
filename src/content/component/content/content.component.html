@@ -7,10 +7,9 @@
     <div class="content-action-container">
       <!---<div class="card content-list-card">
         </div> --->
-      <div>
         <div class="card content-add-card">
           <form class="form" (submit)="onFormSubmit($event)">
-            <h1 class="content-add-form-title">Add Content</h1>
+            <h1 class="content-list-title">Add Content</h1>
             <div class="form-group">
               <div class="form-control">
                 <label for="content-title">Name</label>
@@ -34,8 +33,6 @@
             </div>
           </form>
         </div>
-      </div>
-      <div>
         <div class="card content-list-card">
           <div class="content-list-header">
             <h1 class="content-list-title">Content List</h1>
@@ -45,14 +42,10 @@
               <div class="content-list-item">
                 <div class="content-list-item-name">{{ content.name }}</div>
                 <div class="content-list-item-type">{{ content.content_type }}</div>
-                <div class="content-list-item-action">
-                  <div>TODO</div>
-                </div>
               </div>
             }
           </div>
         </div>
-      </div>
     </div>
   </div>
 </div>

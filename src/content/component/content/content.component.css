@@ -57,9 +57,10 @@
 .content-action-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 20px;
 }
 
 
@@ -68,12 +69,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: auto;
   background-color: #f5f5f5;
   border: 1px solid transparent;
   box-shadow: rgba(0, 35, 81, 0.55) 0 0 .2em .009em;
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin: 20px;
+  padding: 0.9%;
 }
 
 
@@ -126,7 +128,6 @@ label {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .content-list-title {
@@ -142,26 +143,28 @@ label {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 90%;
+  height: 90%;
   background-color: #f5f5f5;
   border: 1px solid transparent;
-  box-shadow: rgba(0, 35, 81, 0.55) 0 0 .2em .009em;
   border-radius: 3px;
   margin-bottom: 20px;
 }
 
 .content-list-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
-  margin: 10px;
-  background-color: #f5f5f5;
-  border: 1px solid transparent;
-  box-shadow: rgba(0, 35, 81, 0.55) 0 0 .2em .009em;
-  border-radius: 3px;
+  margin-top: 5px;
+  border-radius: 2px;
+  border: 1px hidden rgba(46, 45, 45, 0.1);
+  border-bottom-style: dashed;
+  width: 90%;
+  transition: border-bottom-color 0.25s ease-in-out;
+}
+
+.content-list-item:hover {
+  border-color: #2ade2a;
+  border-radius: 4px;
+  border-bottom-style: solid;
+  cursor: pointer;
 }
 
 .content-list-item-name {
@@ -181,15 +184,5 @@ label {
 }
 
 .content-list-item-action {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
-  margin: 10px;
-  background-color: #f5f5f5;
-  border: 1px solid transparent;
-  box-shadow: rgba(0, 35, 81, 0.55) 0 0 .2em .009em;
-  border-radius: 3px;
+
 }

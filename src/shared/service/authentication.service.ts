@@ -2,9 +2,9 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ContentProfile, RegisteredUser} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
-import {BACKEND, END_POINT} from "../util/consts";
-import {Environment} from "../environments/ienvironment";
-import {ENV} from "../environments/environment.provider";
+import {BACKEND, END_POINT} from "../../util/consts";
+import {Environment} from "../../environments/ienvironment";
+import {ENV} from "../../environments/environment.provider";
 
 @Injectable({
   providedIn: 'root'

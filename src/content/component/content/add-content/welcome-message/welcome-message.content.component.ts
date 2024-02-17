@@ -1,12 +1,12 @@
 import {ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
-import {DynamicComponent} from "../../../../../component/dynamic-component";
+import {DynamicComponent} from "../../../../../shared/component/dynamic-component";
 import {ContentAddSection} from "../add-content.interface";
 import {FormsModule} from "@angular/forms";
 import {WelcomeMessagePreviewComponent} from "./welcome-message-preview/welcome-message-preview.component";
 import {NgComponentOutlet} from "@angular/common";
-import {ViewService} from "../../../../../service/view.service";
-import {ContentService} from "../../../../../service/content.service";
-import {WelcomeScreenContentCreate} from "../../../../../model/content";
+import {ViewService} from "../../../../../shared/service/view.service";
+import {ContentService} from "../../../../../shared/service/content.service";
+import {WelcomeScreenContentCreate} from "../../../../../shared/model/content";
 import {ContentComponent} from "../../content.component";
 
 @Component({
@@ -37,7 +37,7 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
 
 
   submit() {
-    if (this.contentService.contentAddName.trim().length == 0) {
+    if (this.contentService.contentAddName.trim().length == 0) { // If there´s no name entered we return
       if (this.timeout !== undefined) {
         clearTimeout(this.timeout);
       }
@@ -45,6 +45,7 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
       this.timeout = setTimeout(() => {
         this.showNameMissing = false
       }, 3000)
+      return
     }
     const messageContent: WelcomeScreenContentCreate = {
       name: this.contentService.contentAddName.trim(),

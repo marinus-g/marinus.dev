@@ -1,15 +1,15 @@
 import {Inject, Injectable, Injector, input, runInInjectionContext} from '@angular/core';
-import {Theme} from "../model/theme/theme";
-import themes from '../themes.json';
+import {Theme} from "../../shared/model/theme";
+import themes from '../../themes.json';
 import {History, HistoryType} from "../model/history";
 import {DomSanitizer} from '@angular/platform-browser';
-import {Commands} from "../terminal/command/commands";
-import {commandAliases, commandRegistry, needsPermission} from '../terminal/command/command';
-import {ContentService} from "./content.service";
-import {AuthenticationService} from "./authentication.service";
-import {UserService} from "./user.service";
-import {ENV} from "../environments/environment.provider";
-import {Environment} from "../environments/ienvironment";
+import {Commands} from "../command/commands";
+import {commandAliases, commandRegistry, needsPermission} from '../command/command';
+import {ContentService} from "../../shared/service/content.service";
+import {AuthenticationService} from "../../shared/service/authentication.service";
+import {UserService} from "../../shared/service/user.service";
+import {ENV} from "../../environments/environment.provider";
+import {Environment} from "../../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'

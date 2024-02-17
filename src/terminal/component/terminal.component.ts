@@ -1,10 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {TerminalService} from "../../service/terminal.service";
+import {TerminalService} from "../service/terminal.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../service/authentication.service";
-import {ContentService} from "../../service/content.service";
+import {AuthenticationService} from "../../shared/service/authentication.service";
+import {ContentService} from "../../shared/service/content.service";
 import {Subscription} from "rxjs";
-import {ViewService} from "../../service/view.service";
+import {ViewService} from "../../shared/service/view.service";
 
 @Component({
   selector: 'app-terminal',

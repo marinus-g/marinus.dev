@@ -1,11 +1,11 @@
 import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
-import {DynamicComponent} from "../../../component/dynamic-component";
+import {DynamicComponent} from "../../../shared/component/dynamic-component";
 import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
 import {CommandContentComponent} from "./add-content/command.content/command.content.component";
-import {ViewService} from '../../../service/view.service';
+import {ViewService} from '../../../shared/service/view.service';
 import {FormsModule} from "@angular/forms";
-import {ContentService} from "../../../service/content.service";
+import {ContentService} from "../../../shared/service/content.service";
 
 @Component({
   selector: 'app-content',

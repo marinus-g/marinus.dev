@@ -2,12 +2,12 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ContentProfile} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
-import {END_POINT} from "../util/consts";
-import {TerminalService} from "./terminal.service";
+import {END_POINT} from "../../util/consts";
+import {TerminalService} from "../../terminal/service/terminal.service";
 import {Content, ContentCreateDto, ContentModel, WelcomeScreenContent} from "../model/content";
 import {UserService} from "./user.service";
-import {ENV} from "../environments/environment.provider";
-import {Environment} from "../environments/ienvironment";
+import {ENV} from "../../environments/environment.provider";
+import {Environment} from "../../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'

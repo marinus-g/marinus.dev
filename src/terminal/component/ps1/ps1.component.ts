@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {TerminalService} from "../../../service/terminal.service";
-import {ContentService} from "../../../service/content.service";
+import {TerminalService} from "../../service/terminal.service";
+import {ContentService} from "../../../shared/service/content.service";
 
 @Component({
   selector: 'app-ps1',

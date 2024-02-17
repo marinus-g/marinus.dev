@@ -7,14 +7,14 @@ import {TerminalComponent} from "./component/terminal.component";
 import {TerminalRoutingModule} from "./terminal.routes";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {DnsService} from "../service/dns.service";
-import {TerminalService} from "../service/terminal.service";
+import {DnsService} from "./service/dns.service";
+import {TerminalService} from "./service/terminal.service";
 import {LoadingComponent} from "./component/loading/loading.component";
-import {AuthenticationService} from "../service/authentication.service";
-import {ContentService} from "../service/content.service";
-import {UserService} from "../service/user.service";
+import {AuthenticationService} from "../shared/service/authentication.service";
+import {ContentService} from "../shared/service/content.service";
+import {UserService} from "../shared/service/user.service";
 import {PasswordInputComponent} from "./component/input/password-input/password-input.component";
-import {ViewService} from "../service/view.service";
+import {ViewService} from "../shared/service/view.service";
 import {ENV, getEnv} from "../environments/environment.provider";
 
 @NgModule({

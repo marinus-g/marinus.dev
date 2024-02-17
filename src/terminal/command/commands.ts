@@ -1,15 +1,15 @@
 import {Command} from "./command";
-import {History, HistoryType} from "../../model/history";
+import {History, HistoryType} from "../model/history";
 import {commandDescription} from "./command";
 import {needsPermission} from "./command";
-import {TerminalService} from "../../service/terminal.service";
+import {TerminalService} from "../service/terminal.service";
 import {ComponentFactoryResolver, inject, ViewContainerRef} from "@angular/core";
-import {DnsService} from "../../service/dns.service";
-import {Dns} from "../../model/dns";
-import {UserService} from "../../service/user.service";
-import {ContentService} from "../../service/content.service";
-import {AuthenticationService} from "../../service/authentication.service";
-import {ViewService} from "../../service/view.service";
+import {DnsService} from "../service/dns.service";
+import {Dns} from "../model/dns";
+import {UserService} from "../../shared/service/user.service";
+import {ContentService} from "../../shared/service/content.service";
+import {AuthenticationService} from "../../shared/service/authentication.service";
+import {ViewService} from "../../shared/service/view.service";
 import {ContentComponent} from "../../content/component/content/content.component";
 
 export class Commands {

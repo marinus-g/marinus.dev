@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, input, ViewChild} from '@angular/core';
-import {TerminalService} from "../../../service/terminal.service";
-import {ViewService} from "../../../service/view.service";
+import {TerminalService} from "../../service/terminal.service";
+import {ViewService} from "../../../shared/service/view.service";
 import {ContentComponent} from "../../../content/component/content/content.component";
 import {compareSegments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker";
 import {TerminalComponent} from "../terminal.component";

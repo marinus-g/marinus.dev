@@ -1,10 +1,10 @@
 import {Inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {END_POINT} from "../util/consts";
+import {END_POINT} from "../../util/consts";
 import {Dns} from "../model/dns";
 import {firstValueFrom} from "rxjs";
-import {ENV} from "../environments/environment.provider";
-import {Environment} from "../environments/ienvironment";
+import {ENV} from "../../environments/environment.provider";
+import {Environment} from "../../environments/ienvironment";
 
 @Injectable({
   providedIn: 'root'
