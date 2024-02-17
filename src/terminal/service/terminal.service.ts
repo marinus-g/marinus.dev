@@ -19,7 +19,6 @@ export class TerminalService {
 
   private _themes: Theme[] = themes;
   private _theme: Theme = this._themes[0];
-  private header: string | null = "Welcome to my Website!";
   private _history: History[] = [];
   private _commandHistory: string[] = [];
   private _lastCommandIndex = -1;
