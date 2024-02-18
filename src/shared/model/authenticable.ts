@@ -28,10 +28,39 @@ export interface ContentProfile extends Authenticatable {
   guestUser: GuestUser;
 }
 
+export interface ContentProfileCreateDto {
+  name: string;
+  contentProfileType: ContentProfileType;
+  guestUser: {
+    username: string;
+    saveInLocalStorage: boolean;
+  };
+}
 
-enum ContentProfileType {
-  PERSONAL,
-  COMPANY,
-  EDUCATIONAL,
-  GUEST
+
+export enum ContentProfileType {
+  PERSONAL = "PERSONAL",
+  COMPANY = "COMPANY",
+  EDUCATIONAL = "EDUCATIONAL",
+  GUEST = "GUEST"
+}
+
+enum ContentProfileTypeHumanizedNames {
+  PERSONAL = "Personal",
+  COMPANY = "Company",
+  EDUCATIONAL = "Educational",
+  GUEST = "Guest"
+}
+
+export function contentProfileTypeToHumanizedString(contentProfileType: ContentProfileType): string {
+  switch (contentProfileType) {
+    case ContentProfileType.PERSONAL:
+      return ContentProfileTypeHumanizedNames.PERSONAL;
+    case ContentProfileType.COMPANY:
+      return ContentProfileTypeHumanizedNames.COMPANY;
+    case ContentProfileType.EDUCATIONAL:
+      return ContentProfileTypeHumanizedNames.EDUCATIONAL;
+    case ContentProfileType.GUEST:
+      return ContentProfileTypeHumanizedNames.GUEST;
+  }
 }

@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  signal,
+  Signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import {DynamicComponent} from "../../shared/component/dynamic-component";
 import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
@@ -10,7 +20,8 @@ import {
   WelcomeMessagePreviewComponent
 } from "./add-content/welcome-message/welcome-message-preview/welcome-message-preview.component";
 import {ContentModel, WelcomeScreenContent} from "../../shared/model/content";
-import {ContentProfile} from "../../shared/model/authenticable";
+import {ContentProfile, ContentProfileType} from "../../shared/model/authenticable";
+import {EditContentProfileComponent} from "./profile/edit-content-profile/edit-content-profile.component";
 
 @Component({
   selector: 'app-content',
@@ -18,7 +29,8 @@ import {ContentProfile} from "../../shared/model/authenticable";
   imports: [
     NgComponentOutlet,
     FormsModule,
-    WelcomeMessageContentComponent
+    WelcomeMessageContentComponent,
+    EditContentProfileComponent
   ],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
@@ -33,6 +45,16 @@ export class ContentComponent implements DynamicComponent, OnInit {
   protected contentEdit: number[] = [];
   private _contentProfileContentList: ContentProfileContent[] = [];
   protected contentAddName = ''
+  protected contentProfileName = ''
+  protected contentProfileUserName = ''
+  protected showContentProfileNameOrUserNameMissing = false;
+  protected showCreatedContentProfile = false;
+  protected showContentProfileNameExists: boolean = false
+  private showCreatedContentProfileTimeout: any | undefined = undefined;
+  private contentProfileNameOrUserNameMissingTimeout: any | undefined = undefined;
+  private contentProfileNameExistsTimeout: any | undefined = undefined;
+  protected _editingContentProfile: ContentProfile | undefined = undefined;
+  protected contentProfileSignal: WritableSignal<ContentProfile> = signal({} as ContentProfile);
   @ViewChild('contentNameInput') contentNameInput: ElementRef | undefined = undefined;
   @ViewChild('contentTypeSelect') contentTypeSelect: ElementRef | undefined = undefined;
   @ViewChild('contentWindow') contentWindow: ElementRef | undefined = undefined;
@@ -201,8 +223,73 @@ export class ContentComponent implements DynamicComponent, OnInit {
     return content as WelcomeScreenContent;
   }
 
-  openContentEdit() {
+  openContentEdit(profile: ContentProfile) {
+    if (this._editingContentProfile === profile) {
+      this._editingContentProfile = undefined;
+      return;
+    }
+    this.contentProfileSignal.set(profile)
+    this._editingContentProfile = profile;
+    if (this._editingContentProfile !== undefined) {
+      return;
+    }
+  }
 
+  submitNewContentProfile() {
+    if (this.contentProfileName === '' || this.contentProfileUserName === '') {
+      this.showContentProfileNameOrUserNameMissing = true;
+      if (this.contentProfileNameOrUserNameMissingTimeout !== undefined) {
+        clearTimeout(this.contentProfileNameOrUserNameMissingTimeout);
+      }
+      this.contentProfileNameOrUserNameMissingTimeout = setTimeout(() => {
+        this.showContentProfileNameOrUserNameMissing = false;
+        this.contentProfileNameOrUserNameMissingTimeout = undefined;
+      }, 5000);
+      return;
+    }
+    this.contentService.createContentProfile({
+      name: this.contentProfileName,
+      guestUser: {
+        username: this.contentProfileUserName,
+        saveInLocalStorage: false
+      },
+      contentProfileType: ContentProfileType.GUEST
+    }).then(value => {
+      if (value === 200) {
+        console.log("Content Profile Name Exists")
+        this.showContentProfileNameExists = true;
+        if (this.contentProfileNameExistsTimeout !== undefined) {
+          clearTimeout(this.contentProfileNameExistsTimeout);
+        }
+        this.contentProfileNameExistsTimeout = setTimeout(() => {
+          this.showContentProfileNameExists = false;
+          this.contentProfileNameExistsTimeout = undefined;
+        }, 5000);
+        return;
+      }
+      if (typeof value === "number") {
+        return;
+      }
+      const profile = value as ContentProfile;
+      this.contentProfileName = '';
+      this.contentProfileUserName = '';
+      this._contentProfileContentList.push({content: [], profile: profile});
+      this.contentService.contentProfileList.push(profile);
+      if (this.showCreatedContentProfileTimeout !== undefined) {
+        clearTimeout(this.showCreatedContentProfileTimeout);
+      }
+      this.showCreatedContentProfile = true;
+      this.showCreatedContentProfileTimeout = setTimeout(() => {
+        this.showCreatedContentProfile = false;
+        this.showCreatedContentProfileTimeout = undefined;
+      }, 5000);
+    }).catch(reason => {
+      console.error(reason);
+    })
+  }
+
+  get contentProfileContentList(): ContentProfileContent[] {
+    return this._contentProfileContentList;
   }
 }
 

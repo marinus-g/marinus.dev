@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ContentProfile} from "../model/authenticable";
+import {ContentProfile, ContentProfileCreateDto} from "../model/authenticable";
 import {firstValueFrom} from "rxjs";
 import {END_POINT} from "../../util/consts";
 import {TerminalService} from "../../terminal/service/terminal.service";
@@ -76,9 +76,15 @@ export class ContentService {
     return response.body as ContentModel[];
   }
 
-  public async createContentProfile(contentProfile: ContentProfile) {
+  public async createContentProfile(contentProfile: ContentProfileCreateDto): Promise<ContentProfile | number> {
     const response$ = this.http.post<ContentProfile>(this.env.apiUrl + END_POINT.CONTENT_PROFILE, contentProfile, {observe: 'response', withCredentials: true});
     const response = await firstValueFrom(response$);
+    console.log("status: " + response.status)
+    if (response.status == 200) {
+      return 200;
+    } else if (response.status != 201) {
+      return response.status;
+    }
     return response.body as ContentProfile;
   }
 
