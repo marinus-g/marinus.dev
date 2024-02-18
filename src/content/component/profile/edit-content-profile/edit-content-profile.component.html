@@ -1,4 +1,4 @@
-<div class="content-edit-container">
+<div class="content-edit-container" id="drop-zone">
   <div class="edit-header-container">
     <h1 class="edit-header">{{ staticProfileName }}</h1>
     <div class="edit-header-divider"></div>
@@ -11,7 +11,7 @@
         <label for="profile-type">Type</label>
         <select id="profile-type" [(ngModel)]="this.selectedProfileType">
           @for (contentProfileType of profileTypes; track contentProfileType) {
-              <option value="{{ contentProfileType }}" [selected]="contentProfile.contentProfileType == contentProfileType">{{ contentProfileTypeToString(contentProfileType) }}</option>
+              <option value="{{ contentProfileType }}" [selected]="contentProfile.profile.contentProfileType == contentProfileType">{{ contentProfileTypeToString(contentProfileType) }}</option>
           }
         </select>
       </div>
@@ -19,7 +19,18 @@
     <div class="profile-info-container">
       <div class="profile-info">
         <div class="profile-info-label">Guest Username:</div>
-        <div class="profile-info-value">{{ contentProfile.guestUser.username }}</div>
+        <input class="profile-info-value" [(ngModel)]="this.guestUserName">
+        <div class="profile-info-value">{{ contentProfile.profile.guestUser.username }}</div>
+      </div>
+    </div>
+    <div class="profile-info-container">
+      <div class="profile-content-list">
+        @for (content of contentList; track content; let idx = $index) {
+          <div class="content-container">
+            <div>{{content.name}}</div>
+            <button class="content-remove-button">Remove</button>
+          </div>
+        }
       </div>
     </div>
     <div class="save-button-container">

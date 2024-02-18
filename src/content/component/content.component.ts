@@ -54,7 +54,8 @@ export class ContentComponent implements DynamicComponent, OnInit {
   private contentProfileNameOrUserNameMissingTimeout: any | undefined = undefined;
   private contentProfileNameExistsTimeout: any | undefined = undefined;
   protected _editingContentProfile: ContentProfile | undefined = undefined;
-  protected contentProfileSignal: WritableSignal<ContentProfile> = signal({} as ContentProfile);
+  protected contentProfileSignal: WritableSignal<ContentProfileContent | undefined> = signal(undefined);
+  protected contentDragSignal: WritableSignal<ContentModel | undefined> = signal(undefined);
   @ViewChild('contentNameInput') contentNameInput: ElementRef | undefined = undefined;
   @ViewChild('contentTypeSelect') contentTypeSelect: ElementRef | undefined = undefined;
   @ViewChild('contentWindow') contentWindow: ElementRef | undefined = undefined;
@@ -228,7 +229,7 @@ export class ContentComponent implements DynamicComponent, OnInit {
       this._editingContentProfile = undefined;
       return;
     }
-    this.contentProfileSignal.set(profile)
+    this.contentProfileSignal.set(this.contentProfileContentList.find(profileContent => profileContent.profile.id === profile.id) as ContentProfileContent);
     this._editingContentProfile = profile;
     if (this._editingContentProfile !== undefined) {
       return;
@@ -291,6 +292,14 @@ export class ContentComponent implements DynamicComponent, OnInit {
   get contentProfileContentList(): ContentProfileContent[] {
     return this._contentProfileContentList;
   }
+
+  onDragStart(contentModel: ContentModel) {
+    this.contentDragSignal.set(contentModel)
+  }
+
+  onDragEnd(event: DragEvent) {
+
+  }
 }
 
 export enum ContentSelectionType {
@@ -298,7 +307,7 @@ export enum ContentSelectionType {
   COMMAND = "Command",
 }
 
-interface ContentProfileContent {
+export interface ContentProfileContent {
   content: ContentModel[];
   profile: ContentProfile;
 }

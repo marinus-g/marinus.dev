@@ -44,7 +44,7 @@
         </div>
         <div class="content-list">
           @for (content of this.contentService.contentList; track content.id) {
-            <div class="content-list-item" (mouseenter)="onPreviewStart(content)" (mouseleave)="onPreviewEnd()"
+            <div draggable="true" (dragstart)="onDragStart(content)" (dragend)="onDragEnd($event)" class="content-list-item" (mouseenter)="onPreviewStart(content)" (mouseleave)="onPreviewEnd()"
                  (click)="!contentEdit.includes(content.id) ? contentEdit.push(content.id) : contentEdit.splice(contentEdit.lastIndexOf(content.id), 1)">
               <div class="content-list-item-name">{{ content.name }}</div>
               <div class="content-list-item-type">{{ content.content_type }}</div>
@@ -109,7 +109,7 @@
     </div>
     <div>
       @if (this._editingContentProfile != undefined) {
-        <app-edit-content-profile [profileSignal]="contentProfileSignal"></app-edit-content-profile>
+        <app-edit-content-profile [profileSignal]="contentProfileSignal" [contentDragSignal]="contentDragSignal"></app-edit-content-profile>
       }
     </div>
   </div>
