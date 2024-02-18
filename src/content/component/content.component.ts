@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {DynamicComponent} from "../../shared/component/dynamic-component";
 import {NgComponentOutlet} from "@angular/common";
 import {WelcomeMessageContentComponent} from "./add-content/welcome-message/welcome-message.content.component";
@@ -10,6 +10,7 @@ import {
   WelcomeMessagePreviewComponent
 } from "./add-content/welcome-message/welcome-message-preview/welcome-message-preview.component";
 import {ContentModel, WelcomeScreenContent} from "../../shared/model/content";
+import {ContentProfile} from "../../shared/model/authenticable";
 
 @Component({
   selector: 'app-content',
@@ -22,7 +23,7 @@ import {ContentModel, WelcomeScreenContent} from "../../shared/model/content";
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
-export class ContentComponent implements DynamicComponent {
+export class ContentComponent implements DynamicComponent, OnInit {
 
   protected contentTypeList = [ContentSelectionType.WELCOME, ContentSelectionType.COMMAND];
   protected _contentAddAddition: DynamicComponent | undefined = undefined;
@@ -30,6 +31,7 @@ export class ContentComponent implements DynamicComponent {
   private previewHidingTimeout: any | undefined = undefined;
   protected preview: any | undefined = undefined;
   protected contentEdit: number[] = [];
+  private _contentProfileContentList: ContentProfileContent[] = [];
   protected contentAddName = ''
   @ViewChild('contentNameInput') contentNameInput: ElementRef | undefined = undefined;
   @ViewChild('contentTypeSelect') contentTypeSelect: ElementRef | undefined = undefined;
@@ -40,13 +42,31 @@ export class ContentComponent implements DynamicComponent {
     return this._contentAddAddition;
   }
 
-  constructor(private viewService: ViewService, protected contentService: ContentService,  private cdr: ChangeDetectorRef) {
-    this.contentService.fetchAll()
-      .catch(reason => {
-      console.error(reason)
-    });
+  constructor(private viewService: ViewService, protected contentService: ContentService, private cdr: ChangeDetectorRef) {
+
   }
 
+
+  ngOnInit() {
+    this.contentService.fetchAll().catch(reason => {
+      console.error(reason);
+    }).finally(() => {
+      this.contentService.fetchAllProfiles()
+        .then(value => {
+          this._contentProfileContentList = [];
+          this.contentService.contentProfileList.forEach(profile => {
+            this.contentService.fetchContentForProfile(profile)
+              .then(contentList => {
+                this._contentProfileContentList.push({content: contentList, profile: profile});
+              }).catch(reason => {
+              console.error(reason);
+            })
+          })
+        }).catch(reason => {
+        console.error(reason);
+      });
+    })
+  }
 
   public set contentAddAddition(value: DynamicComponent | undefined) {
     this._contentAddAddition = value;
@@ -106,7 +126,7 @@ export class ContentComponent implements DynamicComponent {
   }
 
   contentAddNameChange(event: Event) {
-    this.contentAddName =  (event.target as HTMLInputElement).value;
+    this.contentAddName = (event.target as HTMLInputElement).value;
   }
 
   onPreviewStart(content: ContentModel) {
@@ -169,6 +189,10 @@ export class ContentComponent implements DynamicComponent {
     return ''
   }
 
+  getContentProfileForId(contentProfile: ContentProfile) {
+    return this._contentProfileContentList.find(profile => profile.profile.id === contentProfile.id);
+  }
+
   removeFromEdit(id: number) {
     this.contentEdit.splice(this.contentEdit.indexOf(id), 1);
   }
@@ -176,11 +200,20 @@ export class ContentComponent implements DynamicComponent {
   toWelcomeMessageContent(content: ContentModel) {
     return content as WelcomeScreenContent;
   }
+
+  openContentEdit() {
+
+  }
 }
 
 export enum ContentSelectionType {
   WELCOME = "Welcome Message",
   COMMAND = "Command",
+}
+
+interface ContentProfileContent {
+  content: ContentModel[];
+  profile: ContentProfile;
 }
 
 export enum ContentType {

@@ -17,6 +17,7 @@ export class ContentService {
   private _contentProfile: ContentProfile | null = null;
   private _contentArray: Content[] = [];
   private _contentList: ContentModel[] =[];
+  private _contentProfileList: ContentProfile[] = []
 
   constructor(private http: HttpClient, private terminalService: TerminalService, private userService: UserService, @Inject(ENV) private env: Environment) {
   }
@@ -63,6 +64,24 @@ export class ContentService {
     this._contentList = response.body as ContentModel[];
   }
 
+ public async fetchAllProfiles() {
+    const response$ = this.http.get<ContentProfile[]>(this.env.apiUrl + END_POINT.CONTENT_PROFILE_FETCH_ALL, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    this._contentProfileList = response.body as ContentProfile[];
+  }
+
+  public async fetchContentForProfile(contentProfile: ContentProfile) {
+    const response$ = this.http.get<ContentModel[]>(this.env.apiUrl + END_POINT.CONTENT_FETCH + contentProfile.id, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    return response.body as ContentModel[];
+  }
+
+  public async createContentProfile(contentProfile: ContentProfile) {
+    const response$ = this.http.post<ContentProfile>(this.env.apiUrl + END_POINT.CONTENT_PROFILE, contentProfile, {observe: 'response', withCredentials: true});
+    const response = await firstValueFrom(response$);
+    return response.body as ContentProfile;
+  }
+
 
   get contentProfile(): ContentProfile | null {
     return this._contentProfile;
@@ -100,7 +119,18 @@ export class ContentService {
     return this._contentArray;
   }
 
+
+  get contentProfileList(): ContentProfile[] {
+    return this._contentProfileList;
+  }
+
+  set contentProfileList(value: ContentProfile[]) {
+    this._contentProfileList = value;
+  }
+
   get contentList(): ContentModel[] {
     return this._contentList;
   }
+
+
 }

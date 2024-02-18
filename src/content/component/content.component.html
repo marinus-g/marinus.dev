@@ -68,6 +68,29 @@
           }
         </div>
       </div>
+      <div class="card">
+        <div class="content-list-header">
+          <h1 class="content-list-title">Content Profiles</h1>
+        </div>
+        <div class="content-profile-add">
+          <label for="add-profile-input">Profile Name</label>
+          <div class="button">
+            <input placeholder="Name" id="add-profile-input">
+            <button>Add</button>
+          </div>
+        </div>
+        <div class="form-group-divider"></div>
+        <div class="content-profiles-container">
+          @for (profile of this.contentService.contentProfileList; track profile.id) {
+            <div class="content-profile-item" (click)="openContentEdit()">
+              <div class="content-profile-item-name">{{ profile.name }}</div>
+              @if (getContentProfileForId(profile) != undefined) {
+                        <div class="">Additional Content: {{getContentProfileForId(profile)?.content?.length}}</div>
+              }
+            </div>
+          }
+        </div>
+      </div>
     </div>
   </div>
 </div>
