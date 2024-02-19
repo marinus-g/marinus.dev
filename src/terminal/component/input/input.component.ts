@@ -1,6 +1,9 @@
 import {AfterViewInit, Component, ElementRef, HostListener, input, ViewChild} from '@angular/core';
-import {TerminalService} from "../../../service/terminal.service";
-import {ViewService} from "../../../service/view.service";
+import {TerminalService} from "../../service/terminal.service";
+import {ViewService} from "../../../shared/service/view.service";
+import {ContentComponent} from "../../../content/component/content.component";
+import {compareSegments} from "@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker";
+import {TerminalComponent} from "../terminal.component";
 
 @Component({
   selector: 'app-input',
@@ -14,7 +17,7 @@ export class InputComponent implements AfterViewInit {
   public commandInput: string = "";
 
 
-  constructor(protected terminalService: TerminalService, private viewService: ViewService) {
+  constructor(protected terminalService: TerminalService, private viewService: ViewService, private terminalComponent: TerminalComponent) {
   }
 
 
@@ -24,6 +27,9 @@ export class InputComponent implements AfterViewInit {
 
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event: MouseEvent): void {
+    if (this.viewService.isViewSet()) {
+      return;
+    }
     if (event.target instanceof HTMLElement && event.target.tagName === 'A') {
       event.preventDefault()
       window.open(event.target.getAttribute('href') || '', '_blank');
@@ -93,6 +99,7 @@ export class InputComponent implements AfterViewInit {
   @HostListener('keydown.enter', ['$event'])
   onEnter(event: Event) {
     if (event.target != this.inputField?.nativeElement) {
+      console.log("return")
       return;
     }
     event.preventDefault();

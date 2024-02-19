@@ -1,0 +1,21 @@
+<div class="preview-background" [ngStyle]=
+  "{
+  'background-color': terminalService.theme.terminal.outerColor,
+   'top': viewService.previewPositionProperties.top,
+   'left': viewService.previewPositionProperties.left,
+   'height': viewService.previewPositionProperties.height,
+   'width': viewService.previewPositionProperties.width,
+   'opacity': viewService.previewPositionProperties.opacity,
+   }">
+  <div [ngStyle]="{
+    'background-color': terminalService.theme.terminal.backgroundColor,
+    'outline-color': terminalService.theme.terminal.outlineColor,}"
+       class="terminal-container">
+    <h1 class="history-output-style">
+        <pre class="terminal-output__output"
+             *ngFor="let line of getMessages()"
+             [ngStyle]="{'color': terminalService.theme.terminal.primaryColor, 'font-family': terminalService.theme.terminal.font.family + ', Courier New, Courier, monospace'}"
+             [innerHTML]="sanitizer.bypassSecurityTrustHtml(buildInlineHtml(line))"></pre>
+    </h1>
+  </div>
+</div>

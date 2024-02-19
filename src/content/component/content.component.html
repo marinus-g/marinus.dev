@@ -1,0 +1,117 @@
+<div class="parent-container">
+  <div #contentWindow class="content-modal">
+    <div class="content-header">
+      <div class="content-title">Content</div>
+    </div>
+    <div class="divider"></div>
+    @if (this.isPreview()) {
+      <ng-container #componentChild *ngComponentOutlet="preview"></ng-container>
+    }
+    <div class="content-action-container">
+      <!---<div class="card content-list-card">
+        </div> --->
+
+      <div class="card content-add-card">
+        <form class="form" (submit)="onFormSubmit($event)">
+          <h1 class="content-list-title">Add Content</h1>
+          <div class="form-group">
+            <div class="form-control">
+              <label for="content-title">Name</label>
+              <input type="text" id="content-title" placeholder="Enter Name" (change)="contentAddNameChange($event)"
+                     #contentNameInput>
+            </div>
+            <div class="form-control">
+              <label for="content-type">Content Type</label>
+              <select class="" id="content-type"
+                      #contentTypeSelect
+                      (change)="onContentTypeSelect()">
+                <option value="" disabled selected>Select a content type</option>
+                @for (contentType of this.contentTypeList; track contentType.toLowerCase()) {
+                  <option value="{{contentType}}">{{ contentType }}</option>
+                }
+              </select>
+              @if (this.selectedContentType() === ContentSelectionType.WELCOME) {
+                <app-welcome-message [name]="this.contentAddName"></app-welcome-message>
+              }
+            </div>
+          </div>
+          <div class="form-group-divider"></div>
+        </form>
+      </div>
+      <div class="card content-list-card">
+        <div class="content-list-header">
+          <h1 class="content-list-title">Content List</h1>
+        </div>
+        <div class="content-list">
+          @for (content of this.contentService.contentList; track content.id) {
+            <div draggable="true" (dragstart)="onDragStart(content)" (dragend)="onDragEnd($event)" class="content-list-item" (mouseenter)="onPreviewStart(content)" (mouseleave)="onPreviewEnd()"
+                 (click)="!contentEdit.includes(content.id) ? contentEdit.push(content.id) : contentEdit.splice(contentEdit.lastIndexOf(content.id), 1)">
+              <div class="content-list-item-name">{{ content.name }}</div>
+              <div class="content-list-item-type">{{ content.content_type }}</div>
+            </div>
+            @if (this.contentEdit.includes(content.id)) {
+              <div class="content-edit">
+                <div>{{ content.content_type }}</div>
+                @if (content.content_type === ContentType.WELCOME_SCREEN) {
+                  <app-welcome-message [id]="content.id"
+                                       [edit]="true"
+                                       [weight]="this.toWelcomeMessageContent(content).weight"
+                                       [messages]="this.toWelcomeMessageContent(content).welcomeMessage"
+                                       [name]="content.name"></app-welcome-message>
+                } @else if (content.content_type === ContentType.COMMAND) {
+                  <div>TODO</div>
+                } @else {
+                  <div>Content Type not found</div>
+                }
+              </div>
+            }
+            <!--  rename input - welcome-message-content -->
+          }
+        </div>
+      </div>
+      <div class="card">
+        <div class="content-list-header">
+          <h1 class="content-list-title">Content Profiles</h1>
+        </div>
+        <div class="content-profile-add">
+            <div class="content-profile-input-section">
+              <label for="add-profile-input" class="content-profile-input-label">Profile Name</label>
+              <input [(ngModel)]="contentProfileName" placeholder="Profile Name" id="add-profile-input"
+                     class="content-profile-add-input-field">
+            </div>
+            <div class="content-profile-input-section">
+              <label for="guest-user-name" class="content-profile-input-label">Username</label>
+              <input [(ngModel)]="contentProfileUserName" placeholder="Guest User Name" id="guest-user-name"
+              class="content-profile-add-input-field">
+            </div>
+          <div class="content-profile-input-section">
+            <button (click)="submitNewContentProfile()">Add</button>
+          </div>
+          @if (this.showContentProfileNameOrUserNameMissing) {
+            <div class="content-profile-add-error">Please enter a profile name and guest user name!</div>
+          } @else if (this.showCreatedContentProfile) {
+            <div class="content-profile-add-success">Profile Created!</div>
+          } @else if (this.showContentProfileNameExists) {
+            <div class="content-profile-add-error">Profile Name already exists!</div>
+          }
+        </div>
+        <div class="form-group-divider"></div>
+        <div class="content-profiles-container">
+          @for (profile of this.contentService.contentProfileList; track profile.id) {
+            <div class="content-profile-item" (click)="openContentEdit(profile)">
+              <div class="content-profile-item-name">{{ profile.name }}</div>
+              @if (getContentProfileForId(profile) != undefined) {
+                <div class="">Additional Content: {{ getContentProfileForId(profile)?.content?.length }}</div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div>
+      @if (this._editingContentProfile != undefined) {
+        <app-edit-content-profile [profileSignal]="contentProfileSignal" [contentDragSignal]="contentDragSignal"></app-edit-content-profile>
+      }
+    </div>
+  </div>
+</div>

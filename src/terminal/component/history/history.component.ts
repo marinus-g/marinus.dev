@@ -1,7 +1,7 @@
 import {AfterViewChecked, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
-import {TerminalService} from "../../../service/terminal.service";
-import {HistoryType} from "../../../model/history";
-import {History} from "../../../model/history";
+import {TerminalService} from "../../service/terminal.service";
+import {HistoryType} from "../../model/history";
+import {History} from "../../model/history";
 import { DomSanitizer } from '@angular/platform-browser';
 
 

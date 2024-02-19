@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TerminalService} from "../../../../service/terminal.service";
+import {TerminalService} from "../../../service/terminal.service";
 import {NgStyle} from "@angular/common";
 
 @Component({
