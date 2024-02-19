@@ -121,6 +121,27 @@ export class ContentService {
     return response.body as ContentProfile;
   }
 
+  public async addContentToContentProfile(contentProfile: ContentProfile, content: ContentModel): Promise<ContentModel | number> {
+    const response$ = this.http.post<ContentModel>(this.env.apiUrl + END_POINT.CONTENT_PROFILE_ADD_CONTENT.replace("{profile}", String(contentProfile.id)).replace("{content}", String(content.id)), {}, {
+      observe: 'response',
+      withCredentials: true
+    });
+    const response = await firstValueFrom(response$);
+    if (response.status != 200) {
+      return response.status;
+    }
+    return response.body as ContentModel;
+  }
+
+  public async removeContentFromContentProfile(contentProfile: ContentProfile, content: ContentModel): Promise<number> {
+    const response$ = this.http.delete(this.env.apiUrl + END_POINT.CONTENT_PROFILE_ADD_CONTENT.replace("{profile}", String(contentProfile.id)).replace("{content}", String(content.id)), {
+      observe: 'response',
+      withCredentials: true
+    });
+    const response = await firstValueFrom(response$);
+    return response.status;
+  }
+
   public async deleteContentProfile(contentProfile: ContentProfile): Promise<number> {
     const response$ = this.http.delete(this.env.apiUrl + END_POINT.CONTENT_PROFILE + contentProfile.id, {
       observe: 'response',

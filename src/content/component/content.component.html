@@ -55,6 +55,7 @@
                 @if (content.content_type === ContentType.WELCOME_SCREEN) {
                   <app-welcome-message [id]="content.id"
                                        [edit]="true"
+                                       [weight]="this.toWelcomeMessageContent(content).weight"
                                        [messages]="this.toWelcomeMessageContent(content).welcomeMessage"
                                        [name]="content.name"></app-welcome-message>
                 } @else if (content.content_type === ContentType.COMMAND) {

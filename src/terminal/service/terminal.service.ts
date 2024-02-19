@@ -104,7 +104,9 @@ export class TerminalService {
       });
     }
 
-    contentService.getWelcomeScreenContent().flatMap(value => {
+    contentService.getWelcomeScreenContent()
+      .sort((a, b) => b.weight - a.weight)
+      .flatMap(value => {
       return value.welcomeMessage
     })
       .forEach(value => {

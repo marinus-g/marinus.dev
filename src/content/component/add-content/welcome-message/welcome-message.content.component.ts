@@ -23,6 +23,7 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
 
   @Input('edit') public edit = false
   @Input('messages') public messages: string[] = [];
+  @Input('weight') public weight = 0;
   @Input('id') public id = -1;
   @Input('name') public name: string = ''
   tempMessages: string[] = [];
@@ -59,7 +60,8 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
         content_type: "welcome_screen",
         id: this.id,
         name: this.contentComponent.getContentEditName(this.id),
-        welcomeMessage: this.messages
+        welcomeMessage: this.messages,
+        weight: this.weight
       }
       this.contentService.editContent(messageContent).then(value => {
         this.contentComponent.removeFromEdit(this.id);
@@ -68,7 +70,8 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
       const messageContent: WelcomeScreenContentCreate = {
         name: this.name.trim(),
         content_type: 'welcome_screen',
-        welcomeMessage: this.messages
+        welcomeMessage: this.messages,
+        weight: this.weight
       }
       this.contentService.createContent(messageContent)
         .then((content) => {
@@ -80,6 +83,7 @@ export class WelcomeMessageContentComponent implements DynamicComponent, Content
           if (this.contentComponent.contentTypeSelect?.nativeElement) {
             this.contentComponent.contentTypeSelect.nativeElement.value = '';
           }
+          this.contentService.fetchAll().catch(reason => console.log(reason))
         });
     }
   }

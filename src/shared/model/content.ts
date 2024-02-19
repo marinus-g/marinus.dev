@@ -15,8 +15,10 @@ export interface ContentModel extends Content, ContentId {
 
 export interface WelcomeScreenContent extends ContentModel {
   welcomeMessage: string[];
+  weight: number;
 }
 
 export interface WelcomeScreenContentCreate extends ContentCreateDto {
   welcomeMessage: string[];
+  weight: number;
 }

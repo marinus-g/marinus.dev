@@ -1,4 +1,4 @@
-<div class="content-edit-container" id="drop-zone">
+<div #dropZone class="content-edit-container" id="drop-zone">
   <div class="edit-header-container">
     <h1 class="edit-header">{{ staticProfileName }}</h1>
     <div class="edit-header-divider"></div>
@@ -28,13 +28,13 @@
         @for (content of contentList; track content; let idx = $index) {
           <div class="content-container">
             <div>{{content.name}}</div>
-            <button class="content-remove-button">Remove</button>
+            <button class="content-remove-button" (click)="onRemoveContent($event, content)">Remove</button>
           </div>
         }
       </div>
     </div>
-    <div class="save-button-container">
-      <button class="save-button">Save</button>
-    </div>
+  </div>
+  <div class="save-button-container">
+    <button class="save-button" (click)="saveProfile()">Save</button>
   </div>
 </div>

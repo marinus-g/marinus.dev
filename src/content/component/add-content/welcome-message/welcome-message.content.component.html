@@ -8,6 +8,8 @@
         <button class="remove-message-button" (click)="onRemoveMessage(idx, $event)" >-</button>
       </div>
     }
+    <label for="weight-input">Weight</label>
+    <input id="weight-input" type="number" placeholder="weight" [(ngModel)]="weight">
   </div>
   <div class="button-block">
     <button class="add-message-button" (click)="onAddMessage()">+</button>
