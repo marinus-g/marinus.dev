@@ -109,6 +109,17 @@ export class ContentService {
     return response.body as ContentProfile;
   }
 
+  public async getContentProfileToken(contentProfile: ContentProfile): Promise<String> {
+    const response$ = this.http.get<string>(this.env.apiUrl + END_POINT.CONTENT_PROFILE_TOKEN.replace("{profile}", String(contentProfile.id)), {
+      observe: 'response',
+      withCredentials: true,
+      responseType: 'text' as 'json'
+    });
+    const response = await firstValueFrom(response$);
+    console.log("body", response.body)
+    return response.body as string;
+  }
+
   public async editContentProfile(contentProfile: ContentProfile): Promise<ContentProfile | number> {
     const response$ = this.http.put<ContentProfile>(this.env.apiUrl + END_POINT.CONTENT_PROFILE, contentProfile, {
       observe: 'response',

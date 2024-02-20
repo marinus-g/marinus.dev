@@ -142,4 +142,10 @@ export class EditContentProfileComponent implements OnInit {
     event.preventDefault()
     this.contentList = this.contentList.filter((c) => c.id != content.id);
   }
+
+  copyProfileUrl() {
+    this.contentService.getContentProfileToken(this.contentProfile.profile).then((token) => {
+      navigator.clipboard.writeText(window.location.origin + '?content=' + token).catch(reason => console.log(reason))
+    }).catch(reason => console.log(reason));
+  }
 }
