@@ -1,8 +1,8 @@
-import {AfterViewChecked, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {TerminalService} from "../../service/terminal.service";
 import {HistoryType} from "../../model/history";
 import {History} from "../../model/history";
-import { DomSanitizer } from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 
 @Component({
@@ -10,9 +10,10 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })
-export class HistoryComponent implements AfterViewChecked {
+export class HistoryComponent implements AfterViewChecked, OnInit {
 
   @ViewChild('historyContainer') private historyContainer: ElementRef | undefined
+  private tries = 0;
 
   constructor(protected terminalService: TerminalService, protected sanitizer: DomSanitizer) {
 
@@ -22,11 +23,32 @@ export class HistoryComponent implements AfterViewChecked {
     this.scrollToBottom();
   }
 
+  ngOnInit() {
+    this.checkForProjectsLink();
+  }
+
+  private checkForProjectsLink() {
+    const projectsButton = document.getElementById('projects-link');
+    if (projectsButton != null) {
+      projectsButton.onclick = this.openProjects;
+    //  projectsButton.addEventListener('click', this.openProjects);
+    } else {
+      if (this.tries == 4) { // history should be loaded by now
+        return;
+      }
+      setTimeout(this.checkForProjectsLink, 500);
+      this.tries++
+    }
+  }
 
   scrollToBottom(): void {
     if (!this.historyContainer)
       return
     this.historyContainer.nativeElement.scrollTop = this.historyContainer.nativeElement.scrollHeight;
+  }
+
+  openProjects(event: MouseEvent): void {
+    event.preventDefault();
   }
 
   getHistoryOutputAsString(history: History): string {

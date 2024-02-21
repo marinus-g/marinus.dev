@@ -85,6 +85,9 @@ export class TerminalService {
           case "terminal#primaryColor":
             replacement = terminalService._theme.terminal.primaryColor;
             break;
+          case "terminal#secondaryColor":
+            replacement = terminalService._theme.terminal.secondaryColor;
+            break;
           case "terminal#highlightColor":
             replacement = terminalService._theme.terminal.highlightColor;
             break
