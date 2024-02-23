@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ProjectListComponent} from "./component/project-list/project-list.component";
 import {FormsModule} from "@angular/forms";
 import {UserService} from "../shared/service/user.service";
 import {ContentService} from "../shared/service/content.service";
 import {ProjectService} from "./service/project.service";
 import {HttpClientModule} from "@angular/common/http";
+import { ProjectListComponent } from './component/project-list/project-list.component';
 
 
 
 @NgModule({
   id: "project",
-  declarations: [ProjectListComponent],
+  declarations: [
+    ProjectListComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -22,6 +24,11 @@ import {HttpClientModule} from "@angular/common/http";
     ProjectService,
     ContentService
   ],
-  exports: [ProjectListComponent]
+  exports: []
 })
-export class ProjectModule { }
+export class ProjectModule {
+
+  constructor() {
+    console.log("hallo")
+  }
+}
