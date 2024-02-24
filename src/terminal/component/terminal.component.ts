@@ -1,10 +1,12 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {TerminalService} from "../service/terminal.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../shared/service/authentication.service";
 import {ContentService} from "../../shared/service/content.service";
 import {Subscription} from "rxjs";
 import {ViewService} from "../../shared/service/view.service";
+import {ENV} from "../../environments/environment.provider";
+import {Environment} from "../../environments/ienvironment";
 
 @Component({
   selector: 'app-terminal',
@@ -19,7 +21,8 @@ export class TerminalComponent implements OnInit {
 
 
   constructor(protected terminalService: TerminalService, protected route: ActivatedRoute, private router: Router,
-              private authService: AuthenticationService, private contentService: ContentService, protected viewService: ViewService) {
+              private authService: AuthenticationService, private contentService: ContentService,
+              protected viewService: ViewService,  @Inject(ENV) private env: Environment) {
   }
 
   ngOnInit(): void {
@@ -53,7 +56,7 @@ export class TerminalComponent implements OnInit {
     } else {
       this.authService.deleteRegisteredUserToken();
     }
-    this.loadContentProfile(500)
+    this.loadContentProfile(this.env.production == false ? 100 : 500)
   }
 
   private loadContentProfile(delay: number) {
@@ -71,8 +74,21 @@ export class TerminalComponent implements OnInit {
         this.terminalService.init(this.contentService)
         setTimeout(() => {
           this._loading = false;
+          this.handleDevelopmentEnvironment()
         }, delay)
       })
+  }
+
+  private handleDevelopmentEnvironment() {
+    if (!this.env.production) {
+      this.terminalService.userToChangeTo = "root"
+      this.terminalService.handlePasswordInput("123")
+      setTimeout(() => {
+        this.terminalService.handleCommand("projects").catch(reason => {
+          console.error(reason)
+        })
+      }, 4500)
+    }
   }
 
   get loading(): boolean {

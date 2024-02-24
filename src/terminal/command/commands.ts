@@ -11,6 +11,9 @@ import {ContentService} from "../../shared/service/content.service";
 import {AuthenticationService} from "../../shared/service/authentication.service";
 import {ViewService} from "../../shared/service/view.service";
 import {ContentComponent} from "../../content/component/content.component";
+import {ProjectService} from "../../project/service/project.service";
+import {EditProjectComponent} from "../../project/component/edit-project/edit-project.component";
+import {EditProjectsComponent} from "../../project/component/edit-projects/edit-projects.component";
 
 export class Commands {
 
@@ -356,7 +359,15 @@ export class Commands {
     const contentService = inject(ContentService);
     const viewService = inject(ViewService);
     viewService.currentView =  ContentComponent;
-    return "todo"
+    return "Opening content manager.."
+  }
+
+  @Command('projects', "projects - manage projects", ["projects"], [], true)
+  projectsCommand() {
+    const contentService = inject(ProjectService);
+    const viewService = inject(ViewService);
+    viewService.currentView =  EditProjectsComponent;
+    return "Opening projects manager.."
   }
 
 }

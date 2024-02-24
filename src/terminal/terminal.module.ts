@@ -16,6 +16,7 @@ import {UserService} from "../shared/service/user.service";
 import {PasswordInputComponent} from "./component/input/password-input/password-input.component";
 import {ViewService} from "../shared/service/view.service";
 import {ENV, getEnv} from "../environments/environment.provider";
+import {ProjectService} from "../project/service/project.service";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {ENV, getEnv} from "../environments/environment.provider";
   ],
   providers: [
     ViewService,
+    ProjectService,
     TerminalService,
     UserService,
     ContentService,

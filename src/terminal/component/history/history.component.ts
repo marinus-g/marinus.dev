@@ -30,7 +30,11 @@ export class HistoryComponent implements AfterViewChecked, OnInit {
   private checkForProjectsLink() {
     const projectsButton = document.getElementById('projects-link');
     if (projectsButton != null) {
-      projectsButton.onclick = this.openProjects;
+      console.log("Found projects link")
+      projectsButton.addEventListener('click', () => {
+        console.log("Open projects")
+      });
+      //projectsButton.onclick = this.openProjects;
     //  projectsButton.addEventListener('click', this.openProjects);
     } else {
       if (this.tries == 4) { // history should be loaded by now
@@ -48,6 +52,7 @@ export class HistoryComponent implements AfterViewChecked, OnInit {
   }
 
   openProjects(event: MouseEvent): void {
+    console.log("Open projects")
     event.preventDefault();
   }
 

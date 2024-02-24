@@ -1,0 +1,63 @@
+<div class="parent-container">
+  <div class="container">
+    <div class="projects-header">
+      <div class="projects-title">Projects</div>
+    </div>
+    <div class="divider"></div>
+    <div class="section project-tags">
+      <h1>Project Tags</h1>
+      <div class="create-tag">
+        <form>
+          <input type="text" name="tag_name" placeholder="Tag Name" [(ngModel)]="tag" required>
+          <input type="submit" (click)="createProjectTag($event)" value="Create">
+        </form>
+      </div>
+      <div class="tag-list">
+        <div class="tag">
+          <div class="tag-name">Tag Name</div>
+          <div class="tag-delete>">Delete</div>
+        </div>
+      </div>
+    </div>
+    <div class="section project-create-container">
+      <div class="project-create">
+        <div class="project-create-title">Create a new project</div>
+        <div class="project-create-form">
+          <form>
+            <input type="text" name="project_name" placeholder="Project Name" required>
+            <input type="url" placeholder="Project Link">
+            <input type="range" placeholder="0">
+            <input type="text" name="project_description" placeholder="Project Description" required>
+            @if (thumbnailType.length == 0) {
+            <select [(ngModel)]="thumbnailType" [ngModelOptions]="{standalone: true}">
+              <option value="" disabled selected>Select a thumbnail option</option>
+              <option value="file">Upload</option>
+              <option value="url">URL</option>
+            </select>
+            } @else if (thumbnailType === 'file') {
+              <label for="thumbnail-upload" class="custom-file-upload">
+                {{ thumbnailName }}
+                <input id="thumbnail-upload" accept="image/*"
+                       type="file"
+                       style="display: none;"
+                       required
+                       (change)="onThumbnailSelect($event)"
+                >
+              </label>
+            } @else {
+              <input type="url"
+                     name="thumbnail_url"
+                     placeholder="Thumbnail URL"
+                     required
+                     [(ngModel)]="thumbnailUrl">
+            }
+            <input type="submit" value="Create">
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="project-list">
+
+    </div>
+  </div>
+</div>

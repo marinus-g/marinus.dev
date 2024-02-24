@@ -13,4 +13,6 @@ export enum END_POINT {
   CURRENT_USER = '/api/v1/user',
   CONTENT_CREATE = '/api/v1/content/',
   CONTENT_PROFILE_FETCH_ALL = "/api/v1/content/profile/all",
+
+  CREATE_PROJECT_TAG = '/api/v1/project/tag',
 }

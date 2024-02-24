@@ -30,7 +30,12 @@ export class InputComponent implements AfterViewInit {
     if (this.viewService.isViewSet()) {
       return;
     }
-    if (event.target instanceof HTMLElement && event.target.tagName === 'A') {
+    if (event.target instanceof HTMLElement && event.target.tagName === 'A'
+      && event.target.getAttribute("href") != null) {
+      if (!event.target.getAttribute('href')?.startsWith('mailto:')
+        && !event.target.getAttribute('href')?.startsWith('http')) {
+        return;
+      }
       event.preventDefault()
       window.open(event.target.getAttribute('href') || '', '_blank');
       // Allow the default action for <a> tags
