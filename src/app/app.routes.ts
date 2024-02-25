@@ -1,6 +1,4 @@
 import {RouterModule, Routes} from '@angular/router';
-import {ProjectListComponent} from "../project/component/project-list/project-list.component";
-import {NgModule} from "@angular/core";
 
 export const routes: Routes = [
   {

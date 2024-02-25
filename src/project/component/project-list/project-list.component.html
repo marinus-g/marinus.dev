@@ -1,5 +1,8 @@
 <div class="projects-background">
   <div class="projects-container">
-    <app-project [project]="this.project"></app-project>
+    <app-project [arrowAction]="arrowAction"
+                 [showingProject]="showingProjectDescription"
+                 [hovering]="hovering"
+                 [project]="this.project"></app-project>
   </div>
 </div>
