@@ -27,14 +27,19 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
+              "node_modules/mermaid/dist/mermaid.min.js"
+            ]
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.production.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -96,7 +101,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
+              "node_modules/mermaid/dist/mermaid.min.js"
+            ]
           }
         }
       }

@@ -1,1 +1,26 @@
-<p>project works!</p>
+@if (loaded) {
+  <div class="project-background">
+    <div class="project-header">
+      <h1>{{ project()?.name }}</h1>
+      <h3>Click for more info</h3>
+    </div>
+    <div (click)="showDescription = true" class="project-container">
+      <img
+        #userAvatar
+        class="project-thumbnail"
+        [src]="thumbnailUrl" alt="">
+    </div>
+    @if (showDescription) {
+      <div class="project-description-wrapper">
+        <div class="project-description-header">
+          <h2>{{ project()?.name }}</h2>
+          <a target="_blank" href="{{project()?.link}}">{{ project()?.link }}</a>
+          </div>
+          <div class="markdown-wrapper">
+          <markdown [data]="project()?.projectDescription?.markdown" [lineHighlight]="true" [mermaid]="true">
+          </markdown>
+          </div>
+        </div>
+    }
+  </div>
+}

@@ -1,32 +1,13 @@
 export interface Project {
-  id: number;
-  thumbnail: PictureBlock;
+  id: number | undefined;
+  thumbnailReference: string;
   name: string;
+  difficulty: number;
   projectDescription: ProjectDescription;
   link: string;
 }
 
-interface ProjectDescription {
-  id: number;
-  title: string;
-  description: string;
-}
 
 interface ProjectDescription {
-  contentBlocks: ContentBlock[];
-}
-
-interface ContentBlock {
-  id: number;
-}
-
-interface TextBlock extends ContentBlock {
-  text: string;
-  isHtml: boolean;
-}
-
-interface PictureBlock extends ContentBlock {
-  picture: string;
-  isUrl: boolean;
-  imageType: string;
+  markdown: string;
 }

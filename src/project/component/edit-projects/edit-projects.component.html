@@ -4,7 +4,7 @@
       <div class="projects-title">Projects</div>
     </div>
     <div class="divider"></div>
-    <div class="section project-tags">
+    <div class="section">
       <h1>Project Tags</h1>
       <div class="create-tag">
         <form>
@@ -12,28 +12,52 @@
           <input type="submit" (click)="createProjectTag($event)" value="Create">
         </form>
       </div>
-      <div class="tag-list">
-        <div class="tag">
-          <div class="tag-name">Tag Name</div>
-          <div class="tag-delete>">Delete</div>
+      @if (this.projectService.projectTags.length > 0) {
+        <div class="tag-list">
+          @for (tag of this.projectService.projectTags; track tag.id) {
+            <div class="tag">
+              <span>{{ tag.tag }}</span>
+              <span class="tag-delete" (click)="deleteProjectTag(tag.id)">X</span>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
-    <div class="section project-create-container">
-      <div class="project-create">
-        <div class="project-create-title">Create a new project</div>
-        <div class="project-create-form">
-          <form>
-            <input type="text" name="project_name" placeholder="Project Name" required>
-            <input type="url" placeholder="Project Link">
-            <input type="range" placeholder="0">
-            <input type="text" name="project_description" placeholder="Project Description" required>
+    <div class="section">
+      <h1>Create a new project</h1>
+      <form class="project-create-form">
+        <div class="project-front-page">
+          <div class="form-item-container">
+            <label for="project-name">Project Name</label>
+            <input id="project-name" type="text" name="project_name" placeholder="Project Name" [ngModelOptions]="{standalone: true}" required [(ngModel)]="projectName">
+          </div>
+          <div class="form-item-container">
+            <label for="project-link">Project Link</label>
+            <input id="project-link" type="text" placeholder="Project Link" required [ngModelOptions]="{standalone: true}"  [(ngModel)]="projectLink">
+          </div>
+          <div class="form-item-slider-container">
+            <div class="slider-labels">
+              <span>1</span>
+              <label for="difficulty-slider">Difficulty</label>
+              <span>10</span>
+            </div>
+            <input id="difficulty-slider" type="range" min="1" max="10" step="1" value="1" list="tickmarks"  [ngModelOptions]="{standalone: true}" [(ngModel)]="difficulty">
+            <datalist id="tickmarks">
+              <option value="1">
+              <option value="3">
+              <option value="5">
+              <option value="7">
+              <option value="10">
+            </datalist>
+          </div>
+          <div class="form-item-container form-item-thumbnail-container">
+            <label>Thumbnail</label>
             @if (thumbnailType.length == 0) {
-            <select [(ngModel)]="thumbnailType" [ngModelOptions]="{standalone: true}">
-              <option value="" disabled selected>Select a thumbnail option</option>
-              <option value="file">Upload</option>
-              <option value="url">URL</option>
-            </select>
+              <select [(ngModel)]="thumbnailType" [ngModelOptions]="{standalone: true}">
+                <option value="" disabled selected>Select a thumbnail option</option>
+                <option value="file">Upload</option>
+                <option value="url">URL</option>
+              </select>
             } @else if (thumbnailType === 'file') {
               <label for="thumbnail-upload" class="custom-file-upload">
                 {{ thumbnailName }}
@@ -51,10 +75,37 @@
                      required
                      [(ngModel)]="thumbnailUrl">
             }
-            <input type="submit" value="Create">
-          </form>
+          </div>
+          <div class="text-area-container">
+            <label for="project-description-text-box">Description</label>
+            <span>Markdown Supported</span>
+            <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown Cheat Sheet</a>
+            <textarea id="project-description-text-box"
+                      name="project-description"
+                      placeholder="Project Description" required class="slider"
+                      [ngModelOptions]="{standalone: true}"
+                      [(ngModel)]="projectDescription"></textarea>
+            <div class="divider"></div>
+            @if (this.showPreview) {
+              <div class="markdown-preview">
+                @if (this.projectDescription.length > 0) {
+                  <markdown class="markdown-preview" [data]="projectDescription" [lineHighlight]="true" [mermaid]="true"
+                  [emoji]="true"></markdown>
+                  <div (click)="showPreview = false" class="preview-foreground">
+                    <div>Hide Preview</div>
+                  </div>
+                } @else {
+                  <button (click)="showPreview = false">Hide Preview</button>
+                }
+
+              </div>
+            } @else {
+              <button (click)="showPreview = true">Show Preview</button>
+            }
+          </div>
         </div>
-      </div>
+        <input type="submit" value="Create Project" (click)="createProject()">
+      </form>
     </div>
     <div class="project-list">
 

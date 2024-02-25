@@ -14,5 +14,9 @@ export enum END_POINT {
   CONTENT_CREATE = '/api/v1/content/',
   CONTENT_PROFILE_FETCH_ALL = "/api/v1/content/profile/all",
 
-  CREATE_PROJECT_TAG = '/api/v1/project/tag',
+  PROJECT_TAG = '/api/v1/project/tag',
+  FETCH_PROJECT_TAGS = '/api/v1/project/tags',
+  PROJECT = '/api/v1/project/',
+  PROJECTS = '/api/v1/project/all',
+  PICTURE = '/api/v1/picture/'
 }

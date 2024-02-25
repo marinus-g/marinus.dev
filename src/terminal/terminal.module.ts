@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule, SecurityContext} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {Ps1Component} from "./component/ps1/ps1.component";
 import {InputComponent} from "./component/input/input.component";
@@ -6,7 +6,7 @@ import {HistoryComponent} from "./component/history/history.component";
 import {TerminalComponent} from "./component/terminal.component";
 import {TerminalRoutingModule} from "./terminal.routes";
 import {FormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {DnsService} from "./service/dns.service";
 import {TerminalService} from "./service/terminal.service";
 import {LoadingComponent} from "./component/loading/loading.component";
@@ -17,6 +17,7 @@ import {PasswordInputComponent} from "./component/input/password-input/password-
 import {ViewService} from "../shared/service/view.service";
 import {ENV, getEnv} from "../environments/environment.provider";
 import {ProjectService} from "../project/service/project.service";
+import {MarkdownComponent, MarkdownModule, MarkdownService, MARKED_OPTIONS, SECURITY_CONTEXT} from "ngx-markdown";
 
 @NgModule({
   declarations: [
@@ -29,9 +30,18 @@ import {ProjectService} from "../project/service/project.service";
     CommonModule,
     TerminalRoutingModule,
     FormsModule,
+    MarkdownComponent,
     HttpClientModule,
     LoadingComponent,
-    PasswordInputComponent
+    PasswordInputComponent,
+    MarkdownModule.forRoot({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          baseUrl: ' URL HERE '
+        }
+      }}),
   ],
   providers: [
     ViewService,
@@ -39,9 +49,12 @@ import {ProjectService} from "../project/service/project.service";
     TerminalService,
     UserService,
     ContentService,
+    MarkdownService,
     AuthenticationService,
     DnsService,
-    {provide: ENV, useFactory: getEnv}
+    {provide: ENV, useFactory: getEnv},
+    { provide: SECURITY_CONTEXT, useValue: SecurityContext.NONE },
+
   ],
   exports: [
     TerminalComponent
@@ -50,5 +63,6 @@ import {ProjectService} from "../project/service/project.service";
 export class TerminalModule {
 
   constructor() {
+    console.log("TerminalModule")
   }
 }
