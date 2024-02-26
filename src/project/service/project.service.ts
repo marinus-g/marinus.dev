@@ -15,35 +15,46 @@ export class ProjectService {
   private _projectTags: ProjectTag[] = [];
   private _projects: Project[] = [];
 
-  constructor(private http: HttpClient, @Inject(ENV) private env: Environment) { }
+  constructor(private http: HttpClient, @Inject(ENV) private env: Environment) {
+  }
 
   public async createProjectTag(projectTag: any) {
     const response$ = this.http.post<ProjectTag>(this.env.apiUrl + END_POINT.PROJECT_TAG,
       projectTag,
       {
-      observe: 'response',
-      withCredentials: true
-    });
+        observe: 'response',
+        withCredentials: true
+      });
     const response = await firstValueFrom(response$);
     return response.body as ProjectTag;
   }
 
   public async deleteProjectTag(id: number) {
-    const response$ = this.http.delete(this.env.apiUrl + END_POINT.PROJECT_TAG + '/' + id, {observe: 'response', withCredentials: true});
+    const response$ = this.http.delete(this.env.apiUrl + END_POINT.PROJECT_TAG + '/' + id, {
+      observe: 'response',
+      withCredentials: true
+    });
     const response = await firstValueFrom(response$);
     return response.status;
   }
 
   public async createProject(project: Project) {
-    const response$ = this.http.post<Project>(this.env.apiUrl + END_POINT.PROJECT, project, {observe: 'response', withCredentials: true});
+    const response$ = this.http.post<Project>(this.env.apiUrl + END_POINT.PROJECT, project, {
+      observe: 'response',
+      withCredentials: true
+    });
     const response = await firstValueFrom(response$);
     return response.body as Project;
   }
 
-  public async uploadPicture(picture: File, ) {
+  public async uploadPicture(picture: File,) {
     const formData = new FormData();
     formData.append('file', picture);
-    const response$ = this.http.post<string>(this.env.apiUrl + END_POINT.PICTURE, formData,{observe: 'response', withCredentials: true, responseType: 'text' as 'json'});
+    const response$ = this.http.post<string>(this.env.apiUrl + END_POINT.PICTURE, formData, {
+      observe: 'response',
+      withCredentials: true,
+      responseType: 'text' as 'json'
+    });
     const response = await firstValueFrom(response$);
     console.log("response", response)
     return response.body as string;
@@ -52,14 +63,21 @@ export class ProjectService {
   get projectTags(): ProjectTag[] {
     return this._projectTags;
   }
+
   public async fetchProjectTags() {
-    const response$ = this.http.get<ProjectTag[]>(this.env.apiUrl + END_POINT.FETCH_PROJECT_TAGS, {observe: 'response', withCredentials: true});
+    const response$ = this.http.get<ProjectTag[]>(this.env.apiUrl + END_POINT.FETCH_PROJECT_TAGS, {
+      observe: 'response',
+      withCredentials: true
+    });
     const response = await firstValueFrom(response$);
-    this._projectTags =  response.body as ProjectTag[];
+    this._projectTags = response.body as ProjectTag[];
   }
 
   public async fetchProjects() {
-    const response$ = this.http.get<Project[]>(this.env.apiUrl + END_POINT.PROJECTS, {observe: 'response', withCredentials: true});
+    const response$ = this.http.get<Project[]>(this.env.apiUrl + END_POINT.PROJECTS, {
+      observe: 'response',
+      withCredentials: true
+    });
     const response = await firstValueFrom(response$);
     this._projects = (response.body as Project[]).sort((a, b) => b.difficulty - a.difficulty);
   }
@@ -76,4 +94,15 @@ export class ProjectService {
   }
 
 
+  async updateProject(project: Project) {
+
+    console.log("UPDATING")
+    const response$ = this.http.put<Project>(this.env.apiUrl + END_POINT.PROJECT, project, {
+      observe: 'response',
+      withCredentials: true
+    })
+    const response = await firstValueFrom(response$);
+    console.log("UPDATED")
+    return response.body as Project;
+  }
 }

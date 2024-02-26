@@ -27,15 +27,16 @@
   border: 1px solid transparent;
   background-color: black;
   border-radius: 3px;
-  top: 49%;
+  top: 49.5%;
   left: 50%;
   bottom: 10vh;
   cursor: pointer;
   transform: translate(-50%, -50%);
-  height: calc(90vh - 1vh);
+  height: calc(90vh - 3vh);
   transition: box-shadow 0.3s ease-in-out;
   aspect-ratio: 16 / 9;
   margin-top: 1.6%;
+  margin-bottom: 1.6%;
 }
 
 .project-container:hover {
@@ -45,9 +46,14 @@
 .project-container-red-glow {
   box-shadow: rgba(255, 3, 3, 0.55) 0 0 .9em .3em;
 }
+
 .project-container-glow {
   box-shadow: rgba(185, 116, 18, 0.55) 0 0 .9em .3em;
   background-color: floralwhite;
+}
+.project-container-no-glow {
+  box-shadow: none;
+  background-color: black;
 }
 
 .project-container-glow:hover {
@@ -70,6 +76,14 @@
   flex-direction: column;
   user-select: none;
   transition: left 0.3s ease-in-out, right 0.3s ease-in-out;
+}
+
+.project-header-hidden {
+  opacity: 0;
+}
+
+.project-header-height {
+  height: 14%;
 }
 
 .project-header h1 {
@@ -149,6 +163,10 @@
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #191919 #666666;
+  border: 1px solid transparent;
+  border-bottom-color: #3a3232;
+  border-top-color: #3a3232;
+  max-width: 99.6%;
 }
 
 .markdown {
@@ -197,17 +215,17 @@
   cursor: pointer;
   color: transparent;
   transition: background-color 0.9s ease-in, opacity 0.5s ease-in-out;
-  font: 60px Poppins, monospace, serif;
+  font: 60px Inter, monospace, serif;
   opacity: 0;
 }
 
 .click-for-more-info:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  background-image: linear-gradient(to right, ghostwhite, navajowhite, ghostwhite);
+  color: #000000;
+  background-image: linear-gradient(to right, orangered, red, darkred);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  opacity: .8;
+  opacity: .999;
 }
 
 .arrow-container {
@@ -303,4 +321,38 @@
   color: #ffffff;
   height: 35px;
   width: 35px;
+}
+
+@media screen and (max-width: 600px) {
+  .project-container {
+    /* Adjust styles for mobile here */
+    /* For example, you might want to adjust the height, width, or margins */
+    height: 40%;
+    width: calc(90vw - 3vw);
+    transform: translate(-50%, -50%);
+    left: 45%;
+    top: 35%;
+    margin: 5%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .project-header h1 {
+    font-size: 40px;
+    margin-top: 5%;
+  }
+  .project-description-wrapper {
+    top: 10%;
+    width: 95vw; /* Increase the max-width */
+    text-align: center;
+    align-items: center;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+  }
+  .markdown-wrapper {
+    max-width: 90vw;
+  }
+  .markdown {
+    max-width: 90vw;
+  }
 }

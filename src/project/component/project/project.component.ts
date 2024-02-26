@@ -1,4 +1,15 @@
-import {Component, effect, Input, OnInit, signal, WritableSignal} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit, Renderer2,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import {Project} from "../../model/project";
 import {ProjectService} from "../../service/project.service";
 
@@ -7,12 +18,13 @@ import {ProjectService} from "../../service/project.service";
   templateUrl: './project.component.html',
   styleUrl: './project.component.css'
 })
-export class ProjectComponent {
+export class ProjectComponent implements AfterViewInit{
 
   @Input("project") project: WritableSignal<Project | undefined> = signal(undefined)
   @Input('hovering') hovering: WritableSignal<boolean> = signal(false)
   @Input('showingProject') showingProjectDescription: WritableSignal<boolean> = signal(false)
   @Input('arrowAction') arrowAction: WritableSignal<string> | undefined
+  @ViewChild('projectImage') projectImage: ElementRef | undefined
   protected loaded: boolean = false;
   protected thumbnailUrl: string = "";
   protected showDescription: boolean = false;
@@ -23,9 +35,10 @@ export class ProjectComponent {
   protected hideTitle: boolean = false;
   private displayingProject: boolean = false;
   protected projectTitle: string = '';
+  protected hideGlow: boolean = false;
 
 
-  constructor(private projectService: ProjectService) {
+  constructor(private projectService: ProjectService, private renderer: Renderer2) {
     effect(() => {
       const project = this.project()
       if (project) {
@@ -74,6 +87,28 @@ export class ProjectComponent {
     }, {allowSignalWrites: true})
   }
 
+  ngAfterViewInit(): void {
+    if (!this.projectImage) {
+      return
+    }
+    this.renderer.listen(this.projectImage.nativeElement, 'wheel', (event) => {
+      console.log('Element scrolled', event);
+    });
+  }
+
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent) {
+    if (!this.canHover || this.showDescription ||  !this.project() || !this.loaded) {
+      return
+    }
+
+    if (event.deltaY > 0) {
+      this.nextProject()
+    } else {
+      this.lastProject()
+    }
+  }
+
   onShowDescription(event: MouseEvent) {
     if (event.defaultPrevented) {
       return
@@ -83,18 +118,19 @@ export class ProjectComponent {
     this.showingProjectDescription.set(true)
     setTimeout(() => {
       this.descriptionTop = "5%";
+      setTimeout(() => {
+        this.hideGlow = true;
+      }, 350);
     }, 20);
   }
 
   onHideDescription($event: MouseEvent) {
-    this.descriptionTop = '50%'
+    this.descriptionTop = '100%'
+    this.hideGlow = false;
     setTimeout(() => {
-      this.descriptionTop = '100%'
-      setTimeout(() => {
         this.showDescription = false
         this.showingProjectDescription.set(false)
       }, 500)
-    }, 150);
   }
 
   protected nextProject() {
@@ -112,7 +148,6 @@ export class ProjectComponent {
   private generateRandomChar() {
     return String.fromCharCode(65 + Math.floor(Math.random() * 26));
   }
-
 
 }
 

@@ -1,15 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, signal, WritableSignal} from '@angular/core';
 import {ProjectService} from "../../service/project.service";
 import {FormsModule} from "@angular/forms";
 import {MarkdownComponent, MarkdownService} from "ngx-markdown";
 import {Project} from "../../model/project";
+import {EditProjectComponent} from "../edit-project/edit-project.component";
 
 @Component({
   selector: 'app-edit-projects',
   standalone: true,
   imports: [
     FormsModule,
-    MarkdownComponent
+    MarkdownComponent,
+    EditProjectComponent
   ],
   providers: [
     MarkdownService
@@ -30,6 +32,7 @@ export class EditProjectsComponent implements OnInit {
   protected projectName: string = '';
   protected imageType: string = '';
   protected thumbnailFile: File | undefined;
+  protected project: WritableSignal<Project | undefined> = signal(undefined)
 
   constructor(protected projectService: ProjectService) {
   }
@@ -37,6 +40,9 @@ export class EditProjectsComponent implements OnInit {
   ngOnInit() {
     this.projectService.fetchProjectTags().catch((error) => {
       console.error("Error fetching project tags: ", error)
+    });
+    this.projectService.fetchProjects().catch((error) => {
+      console.error("Error fetching projects: ", error)
     });
   }
 
@@ -131,5 +137,9 @@ export class EditProjectsComponent implements OnInit {
     }
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: contentType });
+  }
+
+  protected startProjectEdit(project: Project) {
+    this.project.set(project)
   }
 }

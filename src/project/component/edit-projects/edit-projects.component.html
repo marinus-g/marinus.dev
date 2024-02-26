@@ -29,11 +29,13 @@
         <div class="project-front-page">
           <div class="form-item-container">
             <label for="project-name">Project Name</label>
-            <input id="project-name" type="text" name="project_name" placeholder="Project Name" [ngModelOptions]="{standalone: true}" required [(ngModel)]="projectName">
+            <input id="project-name" type="text" name="project_name" placeholder="Project Name"
+                   [ngModelOptions]="{standalone: true}" required [(ngModel)]="projectName">
           </div>
           <div class="form-item-container">
             <label for="project-link">Project Link</label>
-            <input id="project-link" type="text" placeholder="Project Link" required [ngModelOptions]="{standalone: true}"  [(ngModel)]="projectLink">
+            <input id="project-link" type="text" placeholder="Project Link" required
+                   [ngModelOptions]="{standalone: true}" [(ngModel)]="projectLink">
           </div>
           <div class="form-item-slider-container">
             <div class="slider-labels">
@@ -41,7 +43,8 @@
               <label for="difficulty-slider">Difficulty</label>
               <span>10</span>
             </div>
-            <input id="difficulty-slider" type="range" min="1" max="10" step="1" value="1" list="tickmarks"  [ngModelOptions]="{standalone: true}" [(ngModel)]="difficulty">
+            <input id="difficulty-slider" type="range" min="1" max="10" step="1" value="1" list="tickmarks"
+                   [ngModelOptions]="{standalone: true}" [(ngModel)]="difficulty">
             <datalist id="tickmarks">
               <option value="1">
               <option value="3">
@@ -82,7 +85,7 @@
             <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">Markdown Cheat Sheet</a>
             <textarea id="project-description-text-box"
                       name="project-description"
-                      placeholder="Project Description" required class="slider"
+                      placeholder="Project Description" required class="slider text-area"
                       [ngModelOptions]="{standalone: true}"
                       [(ngModel)]="projectDescription"></textarea>
             <div class="divider"></div>
@@ -90,7 +93,7 @@
               <div class="markdown-preview">
                 @if (this.projectDescription.length > 0) {
                   <markdown class="markdown-preview" [data]="projectDescription" [lineHighlight]="true" [mermaid]="true"
-                  [emoji]="true"></markdown>
+                            [emoji]="true"></markdown>
                   <div (click)="showPreview = false" class="preview-foreground">
                     <div>Hide Preview</div>
                   </div>
@@ -107,8 +110,19 @@
         <input type="submit" value="Create Project" (click)="createProject()">
       </form>
     </div>
-    <div class="project-list">
-
+    <div class="section">
+      <h1>Edit Project</h1>
+      <div class="project-list">
+        @for (project of this.projectService.projects; track project.id) {
+          <div class="project-item" (click)="startProjectEdit(project)">
+            <p>{{ project.name }}</p>
+          </div>
+        }
+      </div>
+      @if (this.project()) {
+        <div class="divider"></div>
+        <app-edit-project class="centered" [project]="project"></app-edit-project>
+      }
     </div>
   </div>
 </div>
