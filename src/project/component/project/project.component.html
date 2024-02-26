@@ -1,13 +1,15 @@
 @if (loaded) {
   <div class="project-background">
-    <div class="project-header-height" [ngStyle]="{'left': titleLeft} " [ngClass]="hideTitle ? 'project-header-hidden' : 'project-header'">
-      <h1 >{{ projectTitle }}</h1>
+    <div class="project-header-height" [ngStyle]="{'left': titleLeft} "
+         [ngClass]="hideTitle ? 'project-header-hidden' : 'project-header'">
+      <h1>{{ projectTitle }}</h1>
       <div style="height: 30px; padding-top: 3%; margin-bottom: 1.5%"></div>
     </div>
-    <div [ngClass]="hideGlow ? 'project-container-no-glow' : (canHover ? 'project-container-glow' : 'project-container-red-glow')"
-         class="project-container" (mouseover)="hovering.set(true)" (mouseleave)="hovering.set(false)">
+    <div
+      [ngClass]="hideGlow ? 'project-container-no-glow' : (canHover ? 'project-container-glow' : 'project-container-red-glow')"
+      class="project-container" (mouseover)="hovering.set(true)" (mouseleave)="hovering.set(false)">
       @if (this.canHover) {
-        <div (click)="onShowDescription($event)" class="click-for-more-info">Click for more Information
+        <div (click)="onShowDescription($event)" class="click-for-more-info">
           <div (click)="$event.preventDefault(); lastProject()" class="arrow-container left">
             <i class="arrow left"></i>
           </div>
@@ -22,11 +24,15 @@
         class="project-thumbnail"
         [src]="thumbnailUrl" alt="">
     </div>
+    <div [ngStyle]="{'opacity': hovering() ? 1 : 0}" class="hovering-information">
+      <h3>Click for more Information</h3>
+    </div>
+
     @if (showDescription) {
       <div [ngStyle]="{'top': descriptionTop}" class="project-description-wrapper">
         <div (click)="onHideDescription($event)" class="close-description-button">
           <i class="close-description-icon"></i>
-          </div>
+        </div>
         <div class="project-description-header">
           <h2>{{ project()?.name }}</h2>
           <a target="_blank" href="{{project()?.link}}">{{ project()?.link }}</a>

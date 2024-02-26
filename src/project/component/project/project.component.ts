@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   Input,
-  OnInit, Renderer2,
+  Renderer2,
   signal,
   ViewChild,
   WritableSignal
