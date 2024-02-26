@@ -21,12 +21,14 @@
   padding-left: 0.5%;
   padding-top: 0;
   padding-bottom: 0;
+  font-size: 18px;
 }
 
 
 .user-input-line {
   display: flex;
   align-items: stretch;
+  font-size: 18px;
 }
 
 .flex-grow {
