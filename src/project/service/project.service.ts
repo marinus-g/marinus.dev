@@ -96,7 +96,6 @@ export class ProjectService {
 
   async updateProject(project: Project) {
 
-    console.log("UPDATING")
     const response$ = this.http.put<Project>(this.env.apiUrl + END_POINT.PROJECT, project, {
       observe: 'response',
       withCredentials: true

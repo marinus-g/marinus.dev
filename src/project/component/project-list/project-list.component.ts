@@ -33,7 +33,6 @@ export class ProjectListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Fetching projects")
     this.projectService.fetchProjects()
       .then(() => {
         if (this.projectService.projects.length > 0) {
@@ -50,7 +49,6 @@ export class ProjectListComponent implements OnInit {
     this.switchProjectsTimer = setTimeout(() => {
       this.switchProject();
       if (this.hovering() || this.showingProjectDescription()) {
-        console.log("Hovering or showing project, not switching", this.hovering(), this.showingProjectDescription())
         return;
       }
       if (this.hasNextProject()) {

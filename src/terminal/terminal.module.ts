@@ -63,6 +63,5 @@ import {MarkdownComponent, MarkdownModule, MarkdownService, MARKED_OPTIONS, SECU
 export class TerminalModule {
 
   constructor() {
-    console.log("TerminalModule")
   }
 }

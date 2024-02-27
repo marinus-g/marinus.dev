@@ -38,6 +38,5 @@ import {NgClass, NgStyle} from "@angular/common";
 })
 export class ProjectModule {
   constructor() {
-    console.log("ProjectModule")
   }
 }

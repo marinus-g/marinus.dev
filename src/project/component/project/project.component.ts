@@ -91,9 +91,6 @@ export class ProjectComponent implements AfterViewInit{
     if (!this.projectImage) {
       return
     }
-    this.renderer.listen(this.projectImage.nativeElement, 'wheel', (event) => {
-      console.log('Element scrolled', event);
-    });
   }
 
   @HostListener('wheel', ['$event'])
