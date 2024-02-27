@@ -31,9 +31,11 @@ export class HistoryComponent implements AfterViewChecked, OnInit {
     const projectsButton = document.getElementById('projects-link');
     if (projectsButton != null) {
       console.log("Found projects link")
+      /*
       projectsButton.addEventListener('click', () => {
         console.log("Open projects")
       });
+       */
       //projectsButton.onclick = this.openProjects;
     //  projectsButton.addEventListener('click', this.openProjects);
     } else {

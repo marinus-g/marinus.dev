@@ -80,11 +80,11 @@ export class TerminalComponent implements OnInit {
   }
 
   private handleDevelopmentEnvironment() {
-    if (!this.env.production) {
+    if (!this.env.production && !this.terminalService.contentService?.contentProfile) {
       this.terminalService.userToChangeTo = "root"
       this.terminalService.handlePasswordInput("123")
       setTimeout(() => {
-        this.terminalService.handleCommand("projects").catch(reason => {
+        this.terminalService.handleCommand("content").catch(reason => {
           console.error(reason)
         })
       }, 4500)

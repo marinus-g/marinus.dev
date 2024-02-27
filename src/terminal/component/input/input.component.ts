@@ -33,7 +33,7 @@ export class InputComponent implements AfterViewInit {
     if (event.target instanceof HTMLElement && event.target.tagName === 'A'
       && event.target.getAttribute("href") != null) {
       if (!event.target.getAttribute('href')?.startsWith('mailto:')
-        && !event.target.getAttribute('href')?.startsWith('http')) {
+        && !event.target.getAttribute('href')?.startsWith('http') && !event.target.getAttribute('target')?.startsWith('_self')) {
         return;
       }
       event.preventDefault()
